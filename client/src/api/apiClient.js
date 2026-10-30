@@ -185,19 +185,28 @@ export const authApi = {
     try {
       return await apiClient.post('/auth/login', data)
     } catch (err) {
-      if (!err.response) {
-        // Backend offline -> Demo mode fallback
-        const role = data.email.includes('gate')
+      // If backend is offline, proxy fails (500/502/504), network error, or ECONNREFUSED:
+      const isBackendUnreachable =
+        !err.response ||
+        err.response.status === 502 ||
+        err.response.status === 503 ||
+        err.response.status === 504 ||
+        (err.response.status === 500 && !err.response.data?.fieldErrors)
+
+      if (isBackendUnreachable) {
+        // Match demo accounts
+        const email = data.email.toLowerCase()
+        const role = email.includes('gate')
           ? 'GATE_STAFF'
-          : data.email.includes('housing')
+          : email.includes('housing')
           ? 'HOUSING_STAFF'
-          : data.email.includes('reg')
+          : email.includes('reg')
           ? 'REGISTRATION_STAFF'
           : 'SUPER_ADMIN'
 
         const demoUser = {
           id: 1,
-          name: role.replace('_', ' '),
+          name: role === 'SUPER_ADMIN' ? 'Super Admin' : role.replace('_', ' '),
           email: data.email,
           role,
         }
@@ -215,12 +224,21 @@ export const authApi = {
   getProfile: () => apiClient.get('/auth/me'),
 }
 
+const isUnreachable = (err) =>
+  !err.response ||
+  err.response.status === 500 ||
+  err.response.status === 502 ||
+  err.response.status === 503 ||
+  err.response.status === 504 ||
+  err.code === 'ECONNABORTED' ||
+  err.code === 'ERR_NETWORK'
+
 export const attendeeApi = {
   getAll: async (params = {}) => {
     try {
       return await apiClient.get('/attendees', { params })
     } catch (err) {
-      if (!err.response) {
+      if (isUnreachable(err)) {
         let list = [...mockStore.attendees]
         if (params.search) {
           const s = params.search.toLowerCase()
@@ -257,7 +275,7 @@ export const attendeeApi = {
     try {
       return await apiClient.post('/attendees/walk-in', data)
     } catch (err) {
-      if (!err.response) {
+      if (isUnreachable(err)) {
         const newAttendee = {
           id: Date.now(),
           registrationId: `VTX-2026-${(mockStore.attendees.length + 1)
@@ -289,7 +307,7 @@ export const attendeeApi = {
     try {
       return await apiClient.post('/attendees/check-in', data)
     } catch (err) {
-      if (!err.response) {
+      if (isUnreachable(err)) {
         const query = data.query.trim().toLowerCase()
         const attendee = mockStore.attendees.find(
           (a) =>
@@ -333,7 +351,7 @@ export const dashboardApi = {
     try {
       return await apiClient.get('/dashboard/stats')
     } catch (err) {
-      if (!err.response) {
+      if (isUnreachable(err)) {
         const total = mockStore.attendees.length
         const checkedIn = mockStore.attendees.filter((a) => a.checkedIn).length
         const preRegistered = mockStore.attendees.filter((a) => a.registrationType === 'PRE_REGISTERED').length
@@ -386,7 +404,7 @@ export const housingApi = {
     try {
       return await apiClient.get('/housing/blocks')
     } catch (err) {
-      if (!err.response) {
+      if (isUnreachable(err)) {
         return { data: mockStore.housingBlocks }
       }
       throw err

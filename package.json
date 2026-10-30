@@ -1,0 +1,19 @@
+{
+  "name": "vortex26-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "VORTEX'26 Event Operations & Registration Control Center",
+  "scripts": {
+    "client:dev": "pnpm --filter client dev",
+    "client:build": "pnpm --filter client build",
+    "client:preview": "pnpm --filter client preview",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "server:run": "cd server && ./gradlew bootRun",
+    "server:test": "cd server && ./gradlew test"
+  },
+  "devDependencies": {
+    "pnpm": "^12.0.0"
+  }
+}

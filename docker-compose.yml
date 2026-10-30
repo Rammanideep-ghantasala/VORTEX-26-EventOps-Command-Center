@@ -1,0 +1,53 @@
+services:
+  # PostgreSQL 17 Database with persistent storage
+  postgres:
+    image: postgres:17-alpine
+    container_name: vortex-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: vortex26
+      POSTGRES_USER: vortex_admin
+      POSTGRES_PASSWORD: vortex2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vortex_admin -d vortex26"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot 3 Kotlin Backend
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: vortex-server
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vortex26
+      SPRING_DATASOURCE_USERNAME: vortex_admin
+      SPRING_DATASOURCE_PASSWORD: vortex2026
+      APP_JWT_SECRET: "vortex26-super-secret-key-that-is-at-least-256-bits-long-for-hs256-algorithm"
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # React 19 Frontend SPA (Nginx)
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: vortex-client
+    restart: unless-stopped
+    ports:
+      - "5173:80"
+    depends_on:
+      - server
+
+volumes:
+  postgres_data:
+    driver: local

@@ -10,52 +10,72 @@
     --accent-blue: #3b82f6;
     --accent-violet: #8b5cf6;
     --accent-cyan: #06b6d4;
-    --accent-emerald: #10b981;
+    --accent-emerald: #15c68b;
     --accent-rose: #f43f5e;
     --accent-amber: #f59e0b;
   }
+
   body {
     @apply bg-gray-950 text-gray-100 antialiased;
     background-image: radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-                      radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+      radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
     background-attachment: fixed;
   }
-  * { @apply border-gray-800; }
+
+  * {
+    @apply border-gray-800;
+  }
 }
 
 @layer components {
   .glass-card {
     @apply bg-gray-900/70 backdrop-blur-md border border-gray-700/50 rounded-xl;
   }
+
   .btn-primary {
-    @apply bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg
-           transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
-           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900;
+    @apply bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900;
   }
+
   .btn-secondary {
-    @apply bg-gray-700 hover:bg-gray-600 text-gray-100 font-semibold px-4 py-2 rounded-lg
-           transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500;
+    @apply bg-gray-700 hover:bg-gray-600 text-gray-100 font-semibold px-4 py-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500;
   }
+
   .btn-danger {
-    @apply bg-rose-600/20 hover:bg-rose-600/40 text-rose-400 border border-rose-600/30
-           font-semibold px-4 py-2 rounded-lg transition-all duration-200;
+    @apply bg-rose-600/20 hover:bg-rose-600/40 text-rose-400 border border-rose-600/30 font-semibold px-4 py-2 rounded-lg transition-all duration-200;
   }
+
   .input-field {
-    @apply w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-gray-100
-           placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1
-           focus:ring-blue-500 transition-colors duration-200;
+    @apply w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200;
   }
+
   .stat-card {
     @apply glass-card p-5 flex flex-col gap-2 hover:border-gray-600/50 transition-all duration-200;
   }
+
   .badge {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold;
   }
-  .badge-green  { @apply badge bg-emerald-500/20 text-emerald-400 border border-emerald-500/30; }
-  .badge-red    { @apply badge bg-rose-500/20 text-rose-400 border border-rose-500/30; }
-  .badge-blue   { @apply badge bg-blue-500/20 text-blue-400 border border-blue-500/30; }
-  .badge-amber  { @apply badge bg-amber-500/20 text-amber-400 border border-amber-500/30; }
-  .badge-violet { @apply badge bg-violet-500/20 text-violet-400 border border-violet-500/30; }
+
+  .badge-green {
+    @apply badge bg-emerald-500/20 text-emerald-400 border border-emerald-500/30;
+  }
+
+  .badge-red {
+    @apply badge bg-rose-500/20 text-rose-400 border border-rose-500/30;
+  }
+
+  .badge-blue {
+    @apply badge bg-blue-500/20 text-blue-400 border border-blue-500/30;
+  }
+
+  .badge-amber {
+    @apply badge bg-amber-500/20 text-amber-400 border border-amber-500/30;
+  }
+
+  .badge-violet {
+    @apply badge bg-violet-500/20 text-violet-400 border border-violet-500/30;
+  }
+
   .table-row {
     @apply border-b border-gray-800/60 hover:bg-gray-800/40 transition-colors duration-150;
   }

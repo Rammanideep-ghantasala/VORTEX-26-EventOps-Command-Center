@@ -174,3 +174,4 @@ Flyway will automatically execute `V1__init_schema.sql` and `V2__seed_data.sql` 
 
 ## 📄 License
 Designed and developed for **VORTEX'26 National Symposium**. All rights reserved.
+

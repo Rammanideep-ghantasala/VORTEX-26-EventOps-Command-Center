@@ -17,25 +17,25 @@ INSERT INTO users (name, email, password, role) VALUES
 
 -- Housing blocks
 INSERT INTO housing_blocks (block_name, block_type, total_rooms, total_capacity, occupied_beds) VALUES
-('Block A - Boys Hostel',    'BOYS',  30, 120, 45),
-('Block B - Boys Hostel',    'BOYS',  25, 100, 30),
-('Block C - Girls Hostel',   'GIRLS', 30, 120, 55),
-('Block D - Girls Hostel',   'GIRLS', 20, 80,  20),
-('VIP Guest House',          'VIP',   10, 20,  4);
+('Hostel Garnet A (Boys)',    'BOYS',  30, 120, 45),
+('Block B - Boys Hostel',     'BOYS',  25, 100, 30),
+('Hostel Opal C (Girls)',     'GIRLS', 30, 120, 55),
+('Block D - Girls Hostel',    'GIRLS', 20, 80,  20),
+('VIP Guest House',           'VIP',   10, 20,  4);
 
--- Sample rooms for Block A
+-- Sample rooms for Hostel Garnet A (Boys)
 INSERT INTO rooms (block_id, room_number, capacity, occupied) VALUES
-(1, 'A-101', 4, 3), (1, 'A-102', 4, 2), (1, 'A-103', 4, 4),
-(1, 'A-104', 4, 0), (1, 'A-105', 4, 4), (1, 'A-106', 4, 2),
-(1, 'A-107', 4, 1), (1, 'A-108', 4, 3), (1, 'A-109', 4, 4),
-(1, 'A-110', 4, 0);
+(1, 'GA-101', 4, 3), (1, 'GA-102', 4, 2), (1, 'GA-103', 4, 4),
+(1, 'GA-104', 4, 0), (1, 'GA-105', 4, 4), (1, 'GA-106', 4, 2),
+(1, 'GA-107', 4, 1), (1, 'GA-108', 4, 3), (1, 'GA-109', 4, 4),
+(1, 'GA-110', 4, 0);
 
--- Sample rooms for Block C
+-- Sample rooms for Hostel Opal C (Girls)
 INSERT INTO rooms (block_id, room_number, capacity, occupied) VALUES
-(3, 'C-101', 4, 4), (3, 'C-102', 4, 3), (3, 'C-103', 4, 2),
-(3, 'C-104', 4, 4), (3, 'C-105', 4, 0), (3, 'C-106', 4, 4),
-(3, 'C-107', 4, 2), (3, 'C-108', 4, 3), (3, 'C-109', 4, 1),
-(3, 'C-110', 4, 0);
+(3, 'OC-101', 4, 4), (3, 'OC-102', 4, 3), (3, 'OC-103', 4, 2),
+(3, 'OC-104', 4, 4), (3, 'OC-105', 4, 0), (3, 'OC-106', 4, 4),
+(3, 'OC-107', 4, 2), (3, 'OC-108', 4, 3), (3, 'OC-109', 4, 1),
+(3, 'OC-110', 4, 0);
 
 -- Sample attendees
 INSERT INTO attendees (registration_id, qr_code, full_name, email, phone, college, registration_type, workshops, competitions, checked_in, housing_required) VALUES

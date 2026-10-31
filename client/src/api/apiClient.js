@@ -107,43 +107,83 @@ const mockStore = {
   housingBlocks: [
     {
       id: 1,
-      blockName: 'Block A - Boys Hostel',
+      blockName: 'Hostel Garnet A (Boys)',
       blockType: 'BOYS',
       totalCapacity: 120,
       occupiedBeds: 45,
       availableBeds: 75,
       rooms: [
-        { id: 101, roomNumber: 'A-101', capacity: 4, occupied: 3, isFull: false },
-        { id: 102, roomNumber: 'A-102', capacity: 4, occupied: 2, isFull: false },
-        { id: 103, roomNumber: 'A-103', capacity: 4, occupied: 4, isFull: true },
-        { id: 104, roomNumber: 'A-104', capacity: 4, occupied: 0, isFull: false },
-        { id: 105, roomNumber: 'A-105', capacity: 4, occupied: 4, isFull: true },
-        { id: 106, roomNumber: 'A-106', capacity: 4, occupied: 2, isFull: false },
-        { id: 107, roomNumber: 'A-107', capacity: 4, occupied: 1, isFull: false },
-        { id: 108, roomNumber: 'A-108', capacity: 4, occupied: 3, isFull: false },
-        { id: 109, roomNumber: 'A-109', capacity: 4, occupied: 4, isFull: true },
-        { id: 110, roomNumber: 'A-110', capacity: 4, occupied: 0, isFull: false },
+        { id: 101, roomNumber: 'GA-101', capacity: 4, occupied: 3, isFull: false },
+        { id: 102, roomNumber: 'GA-102', capacity: 4, occupied: 2, isFull: false },
+        { id: 103, roomNumber: 'GA-103', capacity: 4, occupied: 4, isFull: true },
+        { id: 104, roomNumber: 'GA-104', capacity: 4, occupied: 0, isFull: false },
+        { id: 105, roomNumber: 'GA-105', capacity: 4, occupied: 4, isFull: true },
+        { id: 106, roomNumber: 'GA-106', capacity: 4, occupied: 2, isFull: false },
+        { id: 107, roomNumber: 'GA-107', capacity: 4, occupied: 1, isFull: false },
+        { id: 108, roomNumber: 'GA-108', capacity: 4, occupied: 3, isFull: false },
+        { id: 109, roomNumber: 'GA-109', capacity: 4, occupied: 4, isFull: true },
+        { id: 110, roomNumber: 'GA-110', capacity: 4, occupied: 0, isFull: false },
       ],
     },
     {
       id: 2,
-      blockName: 'Block C - Girls Hostel',
+      blockName: 'Hostel Opal C (Girls)',
       blockType: 'GIRLS',
       totalCapacity: 120,
       occupiedBeds: 55,
       availableBeds: 65,
       rooms: [
-        { id: 301, roomNumber: 'C-101', capacity: 4, occupied: 4, isFull: true },
-        { id: 302, roomNumber: 'C-102', capacity: 4, occupied: 3, isFull: false },
-        { id: 303, roomNumber: 'C-103', capacity: 4, occupied: 2, isFull: false },
-        { id: 304, roomNumber: 'C-104', capacity: 4, occupied: 4, isFull: true },
-        { id: 305, roomNumber: 'C-105', capacity: 4, occupied: 0, isFull: false },
-        { id: 306, roomNumber: 'C-106', capacity: 4, occupied: 4, isFull: true },
-        { id: 307, roomNumber: 'C-107', capacity: 4, occupied: 2, isFull: false },
-        { id: 308, roomNumber: 'C-108', capacity: 4, occupied: 3, isFull: false },
-        { id: 309, roomNumber: 'C-109', capacity: 4, occupied: 1, isFull: false },
-        { id: 310, roomNumber: 'C-110', capacity: 4, occupied: 0, isFull: false },
+        { id: 201, roomNumber: 'OC-101', capacity: 4, occupied: 4, isFull: true },
+        { id: 202, roomNumber: 'OC-102', capacity: 4, occupied: 3, isFull: false },
+        { id: 203, roomNumber: 'OC-103', capacity: 4, occupied: 2, isFull: false },
+        { id: 204, roomNumber: 'OC-104', capacity: 4, occupied: 4, isFull: true },
+        { id: 205, roomNumber: 'OC-105', capacity: 4, occupied: 0, isFull: false },
+        { id: 206, roomNumber: 'OC-106', capacity: 4, occupied: 4, isFull: true },
+        { id: 207, roomNumber: 'OC-107', capacity: 4, occupied: 2, isFull: false },
+        { id: 208, roomNumber: 'OC-108', capacity: 4, occupied: 3, isFull: false },
+        { id: 209, roomNumber: 'OC-109', capacity: 4, occupied: 1, isFull: false },
+        { id: 210, roomNumber: 'OC-110', capacity: 4, occupied: 0, isFull: false },
       ],
+    },
+    {
+      id: 3,
+      blockName: 'VIP Guest House',
+      blockType: 'VIP',
+      totalCapacity: 20,
+      occupiedBeds: 4,
+      availableBeds: 16,
+      rooms: [
+        { id: 301, roomNumber: 'VIP-101', capacity: 2, occupied: 2, isFull: true },
+        { id: 302, roomNumber: 'VIP-102', capacity: 2, occupied: 1, isFull: false },
+        { id: 303, roomNumber: 'VIP-103', capacity: 2, occupied: 1, isFull: false },
+        { id: 304, roomNumber: 'VIP-104', capacity: 2, occupied: 0, isFull: false },
+      ],
+    },
+  ],
+  allocations: [
+    {
+      id: 1,
+      attendeeId: 1,
+      attendeeName: 'Arjun Sharma',
+      registrationId: 'VTX-2026-0001',
+      blockName: 'Hostel Garnet A (Boys)',
+      blockType: 'BOYS',
+      roomNumber: 'GA-101',
+      checkedIn: true,
+      checkedOut: false,
+      allocatedAt: '2026-10-30T09:00:00Z',
+    },
+    {
+      id: 2,
+      attendeeId: 2,
+      attendeeName: 'Priya Krishnan',
+      registrationId: 'VTX-2026-0002',
+      blockName: 'Hostel Opal C (Girls)',
+      blockType: 'GIRLS',
+      roomNumber: 'OC-101',
+      checkedIn: true,
+      checkedOut: false,
+      allocatedAt: '2026-10-30T09:10:00Z',
     },
   ],
 }
@@ -410,10 +450,110 @@ export const housingApi = {
       throw err
     }
   },
-  allocate: (data) => apiClient.post('/housing/allocate', data),
+  getAllocations: async () => {
+    try {
+      return await apiClient.get('/housing/allocations')
+    } catch (err) {
+      if (isUnreachable(err)) {
+        return { data: mockStore.allocations || [] }
+      }
+      throw err
+    }
+  },
+  allocate: async (data) => {
+    try {
+      return await apiClient.post('/housing/allocate', data)
+    } catch (err) {
+      if (isUnreachable(err)) {
+        // Find attendee and room
+        const attendee = mockStore.attendees.find((a) => a.id === Number(data.attendeeId))
+        let targetBlock = null
+        let targetRoom = null
+
+        for (const block of mockStore.housingBlocks) {
+          const room = block.rooms.find((r) => r.id === Number(data.roomId))
+          if (room) {
+            targetBlock = block
+            targetRoom = room
+            break
+          }
+        }
+
+        if (!targetRoom || targetRoom.isFull) {
+          const errFull = new Error('Room is full or does not exist')
+          errFull.response = { data: { message: 'Selected room is already at full capacity' } }
+          throw errFull
+        }
+
+        // Increment occupancy
+        targetRoom.occupied += 1
+        targetRoom.isFull = targetRoom.occupied >= targetRoom.capacity
+        targetBlock.occupiedBeds += 1
+        targetBlock.availableBeds = targetBlock.totalCapacity - targetBlock.occupiedBeds
+
+        const newAlloc = {
+          id: Date.now(),
+          attendeeId: attendee ? attendee.id : Number(data.attendeeId),
+          attendeeName: attendee ? attendee.fullName : 'Attendee #' + data.attendeeId,
+          registrationId: attendee ? attendee.registrationId : 'VTX-2026-X',
+          blockName: targetBlock.blockName,
+          blockType: targetBlock.blockType,
+          roomNumber: targetRoom.roomNumber,
+          checkedIn: false,
+          checkedOut: false,
+          allocatedAt: new Date().toISOString(),
+        }
+
+        if (!mockStore.allocations) mockStore.allocations = []
+        mockStore.allocations.unshift(newAlloc)
+
+        return { data: newAlloc }
+      }
+      throw err
+    }
+  },
   getByAttendee: (id) => apiClient.get(`/housing/attendee/${id}`),
-  roomCheckIn: (id) => apiClient.patch(`/housing/allocations/${id}/check-in`),
-  roomCheckOut: (id) => apiClient.patch(`/housing/allocations/${id}/check-out`),
+  roomCheckIn: async (id) => {
+    try {
+      return await apiClient.patch(`/housing/allocations/${id}/check-in`)
+    } catch (err) {
+      if (isUnreachable(err)) {
+        const alloc = (mockStore.allocations || []).find((a) => a.id === Number(id))
+        if (alloc) {
+          alloc.checkedIn = true
+          alloc.checkedInAt = new Date().toISOString()
+        }
+        return { data: alloc }
+      }
+      throw err
+    }
+  },
+  roomCheckOut: async (id) => {
+    try {
+      return await apiClient.patch(`/housing/allocations/${id}/check-out`)
+    } catch (err) {
+      if (isUnreachable(err)) {
+        const alloc = (mockStore.allocations || []).find((a) => a.id === Number(id))
+        if (alloc && !alloc.checkedOut) {
+          alloc.checkedOut = true
+          alloc.checkedOutAt = new Date().toISOString()
+          // release bed
+          for (const block of mockStore.housingBlocks) {
+            const room = block.rooms.find((r) => r.roomNumber === alloc.roomNumber)
+            if (room && room.occupied > 0) {
+              room.occupied -= 1
+              room.isFull = false
+              block.occupiedBeds = Math.max(0, block.occupiedBeds - 1)
+              block.availableBeds = block.totalCapacity - block.occupiedBeds
+              break
+            }
+          }
+        }
+        return { data: alloc }
+      }
+      throw err
+    }
+  },
 }
 
 export default apiClient

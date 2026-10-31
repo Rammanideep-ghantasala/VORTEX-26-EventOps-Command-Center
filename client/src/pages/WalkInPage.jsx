@@ -16,7 +16,9 @@ const COMPETITIONS = [
 const defaultForm = {
   fullName: '', email: '', phone: '', college: '',
   workshops: [], competitions: [],
-  housingRequired: false, paymentMode: 'CASH',
+  housingRequired: false,
+  hostelPreference: 'Hostel Garnet A (Boys)',
+  paymentMode: 'CASH',
   paymentReference: '', amountPaid: '',
 }
 
@@ -108,12 +110,39 @@ export default function WalkInPage() {
 
         {/* Housing */}
         <Section title="Accommodation">
-          <label className="flex items-center gap-2.5 cursor-pointer">
-            <input type="checkbox" checked={form.housingRequired}
-              onChange={e => setForm(f => ({ ...f, housingRequired: e.target.checked }))}
-              className="w-4 h-4 accent-blue-500" />
-            <span className="text-gray-300 text-sm">Requires on-campus housing allocation</span>
-          </label>
+          <div className="space-y-3">
+            <label className="flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" checked={form.housingRequired}
+                onChange={e => setForm(f => ({ ...f, housingRequired: e.target.checked }))}
+                className="w-4 h-4 accent-blue-500" />
+              <span className="text-gray-300 text-sm">Requires on-campus housing allocation</span>
+            </label>
+
+            {form.housingRequired && (
+              <div className="p-3 bg-gray-800/60 border border-gray-700/60 rounded-lg space-y-2 animate-fade-in">
+                <label className="text-xs font-medium text-gray-400">Assigned Hostel / Block Preference</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { id: 'Hostel Garnet A (Boys)', label: 'Hostel: Garnet A (Boys)', color: 'border-blue-500/40 text-blue-300' },
+                    { id: 'Hostel Opal C (Girls)', label: 'Hostel: Opal C (Girls)', color: 'border-violet-500/40 text-violet-300' },
+                  ].map(h => (
+                    <button
+                      key={h.id}
+                      type="button"
+                      onClick={() => setForm(f => ({ ...f, hostelPreference: h.id }))}
+                      className={`text-xs px-3 py-2 rounded-lg border text-left transition-all ${
+                        form.hostelPreference === h.id
+                          ? `${h.color} bg-gray-700/60 font-semibold shadow-sm`
+                          : 'border-gray-700 text-gray-400 hover:border-gray-600'
+                      }`}
+                    >
+                      {h.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </Section>
 
         {/* Payment */}

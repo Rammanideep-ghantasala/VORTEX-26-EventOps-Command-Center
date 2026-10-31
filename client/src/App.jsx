@@ -13,9 +13,9 @@ import AttendeesPage from './pages/AttendeesPage'
 
 function AppLayout() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen w-full overflow-hidden">
       <Sidebar />
-      <main className="flex-1 p-6 overflow-auto">
+      <main className="flex-1 h-screen min-h-0 overflow-y-auto p-6">
         <Outlet />
       </main>
     </div>

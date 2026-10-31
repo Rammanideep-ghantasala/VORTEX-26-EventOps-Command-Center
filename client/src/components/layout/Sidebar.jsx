@@ -32,9 +32,9 @@ export default function Sidebar() {
   )
 
   return (
-    <aside className="w-64 min-h-screen bg-gray-900/80 border-r border-gray-800 flex flex-col backdrop-blur-md">
+    <aside className="w-64 h-screen flex-shrink-0 bg-gray-900/80 border-r border-gray-800 flex flex-col backdrop-blur-md overflow-hidden select-none">
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-gray-800">
+      <div className="flex-shrink-0 px-5 py-5 border-b border-gray-800">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
             <Zap size={16} className="text-white" />
@@ -47,7 +47,7 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5">
+      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-hidden">
         {visibleNav.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
@@ -68,7 +68,7 @@ export default function Sidebar() {
 
       {/* User profile */}
       {user && (
-        <div className="px-4 py-4 border-t border-gray-800 space-y-3">
+        <div className="mt-auto flex-shrink-0 px-4 py-4 border-t border-gray-800 space-y-3">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
               {user.name.charAt(0).toUpperCase()}

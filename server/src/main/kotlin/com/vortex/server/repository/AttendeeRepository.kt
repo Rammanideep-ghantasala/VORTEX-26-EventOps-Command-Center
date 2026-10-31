@@ -18,7 +18,8 @@ interface AttendeeRepository : JpaRepository<Attendee, Long> {
     fun findByEmail(email: String): Optional<Attendee>
     fun existsByEmail(email: String): Boolean
 
-    fun countByCheckedIn(checkedIn: Boolean): Long
+    @Query("SELECT COUNT(a) FROM Attendee a WHERE a.checkedIn = :checkedIn")
+    fun countByCheckedIn(@Param("checkedIn") checkedIn: Boolean): Long
     fun countByRegistrationType(type: RegistrationType): Long
     fun countByHousingRequired(housingRequired: Boolean): Long
 

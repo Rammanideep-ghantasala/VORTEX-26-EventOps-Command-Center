@@ -116,3 +116,4 @@ graph TD
 * Database schema is versioned in code under `src/main/resources/db/migration`:
   - `V1__init_schema.sql`: DDL creating relational tables, foreign keys, array types, and high-performance b-tree indexes (`idx_attendees_qr_code`, `idx_attendees_registration_id`).
   - `V2__seed_data.sql`: DML seeding default staff accounts, Garnet A & Opal C hostels, rooms, and realistic participants.
+

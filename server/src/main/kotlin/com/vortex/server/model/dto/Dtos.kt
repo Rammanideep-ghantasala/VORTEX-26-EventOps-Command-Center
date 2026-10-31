@@ -4,6 +4,7 @@ import com.vortex.server.model.entity.*
 import jakarta.validation.constraints.*
 import java.math.BigDecimal
 import java.time.Instant
+import java.time.LocalDate
 
 // ─── Auth DTOs ────────────────────────────────────────────────────────────────
 
@@ -67,6 +68,10 @@ data class WalkInRequest(
     @field:NotBlank(message = "College is required")
     val college: String,
 
+    val gender: Gender? = Gender.MALE,
+    val department: String? = "Computer Science & Engineering",
+    val yearOfStudy: String? = "3rd Year",
+
     val workshops: List<String> = emptyList(),
     val competitions: List<String> = emptyList(),
     val housingRequired: Boolean = false,
@@ -85,6 +90,9 @@ data class AttendeeResponse(
     val email: String,
     val phone: String,
     val college: String,
+    val gender: Gender?,
+    val department: String?,
+    val yearOfStudy: String?,
     val registrationType: RegistrationType,
     val workshops: List<String>,
     val competitions: List<String>,
@@ -105,6 +113,9 @@ data class AttendeeResponse(
             email = a.email,
             phone = a.phone,
             college = a.college,
+            gender = a.gender,
+            department = a.department,
+            yearOfStudy = a.yearOfStudy,
             registrationType = a.registrationType,
             workshops = a.workshops.toList(),
             competitions = a.competitions.toList(),
@@ -118,6 +129,46 @@ data class AttendeeResponse(
         )
     }
 }
+
+// ── Complete Attendee Profile DTOs ────────────────────────────────────────────
+
+data class WorkshopRegistrationDto(
+    val id: Long,
+    val workshopId: Long,
+    val workshopName: String,
+    val workshopCode: String,
+    val status: WorkshopRegStatus,
+    val registeredAt: Instant,
+    val attendanceStatus: String = "REGISTERED"
+)
+
+data class EventRegistrationDto(
+    val id: Long,
+    val eventName: String,
+    val status: String,
+    val registeredAt: Instant,
+    val attendanceStatus: String = "REGISTERED"
+)
+
+data class GateLogDto(
+    val id: Long,
+    val action: String,
+    val gateLocation: String?,
+    val operatorName: String,
+    val note: String?,
+    val loggedAt: Instant
+)
+
+data class AttendeeProfileResponse(
+    val personalInfo: AttendeeResponse,
+    val currentAccommodation: HousingAllocationResponse?,
+    val accommodationHistory: List<HousingAllocationResponse>,
+    val workshopRegistrations: List<WorkshopRegistrationDto>,
+    val totalWorkshops: Int,
+    val eventRegistrations: List<EventRegistrationDto>,
+    val totalEvents: Int,
+    val gateLogs: List<GateLogDto>
+)
 
 data class CheckInRequest(
     @field:NotBlank(message = "Registration ID or QR code is required")
@@ -161,6 +212,7 @@ data class DashboardStatsResponse(
 )
 
 data class BlockOccupancyDto(
+    val blockId: Long = 0,
     val blockName: String,
     val blockType: String,
     val totalCapacity: Int,
@@ -169,14 +221,39 @@ data class BlockOccupancyDto(
     val occupancyPercentage: Double
 )
 
-// ─── Housing DTOs ─────────────────────────────────────────────────────────────
+data class RoomOccupancyDto(
+    val roomId: Long,
+    val roomNumber: String,
+    val blockName: String,
+    val blockType: String,
+    val capacity: Int,
+    val occupied: Int,
+    val availableBeds: Int,
+    val isFull: Boolean
+)
+
+// ─── Accommodation / Housing DTOs ─────────────────────────────────────────────
 
 data class AllocateRoomRequest(
     @field:NotNull(message = "Attendee ID is required")
     val attendeeId: Long,
 
     @field:NotNull(message = "Room ID is required")
-    val roomId: Long
+    val roomId: Long,
+
+    @field:NotNull(message = "From Date is required")
+    val fromDate: LocalDate,
+
+    @field:NotNull(message = "To Date is required")
+    val toDate: LocalDate,
+
+    val manualGenderOverride: Boolean = false
+)
+
+data class UpdateRoomCapacityRequest(
+    @field:Min(value = 1, message = "Capacity must be at least 1 bed")
+    @field:Max(value = 20, message = "Capacity cannot exceed 20 beds per room")
+    val capacity: Int
 )
 
 data class HousingAllocationResponse(
@@ -185,9 +262,13 @@ data class HousingAllocationResponse(
     val blockName: String,
     val blockType: String,
     val roomNumber: String,
+    val fromDate: LocalDate,
+    val toDate: LocalDate,
+    val status: AllocationStatus,
     val checkedIn: Boolean,
     val checkedInAt: Instant?,
     val checkedOut: Boolean,
+    val checkedOutAt: Instant?,
     val allocatedAt: Instant
 ) {
     companion object {
@@ -197,9 +278,13 @@ data class HousingAllocationResponse(
             blockName = h.block.blockName,
             blockType = h.block.blockType.name,
             roomNumber = h.room.roomNumber,
+            fromDate = h.fromDate,
+            toDate = h.toDate,
+            status = h.status,
             checkedIn = h.checkedIn,
             checkedInAt = h.checkedInAt,
             checkedOut = h.checkedOut,
+            checkedOutAt = h.checkedOutAt,
             allocatedAt = h.allocatedAt
         )
     }
@@ -214,7 +299,14 @@ data class RoomResponse(
     val isFull: Boolean
 ) {
     companion object {
-        fun from(r: Room) = RoomResponse(r.id, r.roomNumber, r.capacity, r.occupied, r.availableBeds, r.isFull)
+        fun from(r: Room, activeOccupancy: Int? = null) = RoomResponse(
+            id = r.id,
+            roomNumber = r.roomNumber,
+            capacity = r.capacity,
+            occupied = activeOccupancy ?: r.occupied,
+            availableBeds = maxOf(0, r.capacity - (activeOccupancy ?: r.occupied)),
+            isFull = (activeOccupancy ?: r.occupied) >= r.capacity
+        )
     }
 }
 
@@ -228,3 +320,90 @@ data class HousingBlockResponse(
     val rooms: List<RoomResponse>
 )
 
+data class AccommodationDashboardResponse(
+    val totalHostels: Int,
+    val totalRooms: Int,
+    val totalBedCapacity: Int,
+    val occupiedBeds: Int,
+    val availableBeds: Int,
+    val hostelOccupancy: List<BlockOccupancyDto>,
+    val roomOccupancy: List<RoomOccupancyDto>,
+    val upcomingCheckIns: List<HousingAllocationResponse>,
+    val upcomingCheckOuts: List<HousingAllocationResponse>
+)
+
+// ─── Workshop Management DTOs ─────────────────────────────────────────────────
+
+data class CreateWorkshopRequest(
+    @field:NotBlank(message = "Workshop name is required")
+    val name: String,
+
+    @field:NotBlank(message = "Workshop code is required")
+    val code: String,
+
+    val description: String? = null,
+
+    @field:Min(value = 1, message = "Capacity must be at least 1")
+    @field:Max(value = 100, message = "Capacity cannot exceed 100")
+    val capacity: Int = 100,
+
+    val instructor: String? = "Industry Expert",
+    val venue: String? = "Auditorium Hall"
+)
+
+data class UpdateWorkshopCapacityRequest(
+    @field:Min(value = 1, message = "Capacity must be at least 1")
+    @field:Max(value = 100, message = "Capacity cannot exceed 100")
+    val capacity: Int
+)
+
+data class WorkshopResponse(
+    val id: Long,
+    val name: String,
+    val code: String,
+    val description: String?,
+    val capacity: Int,
+    val registeredParticipants: Int,
+    val availableSeats: Int,
+    val occupancyPercentage: Double,
+    val status: WorkshopStatus,
+    val instructor: String?,
+    val venue: String?
+) {
+    companion object {
+        fun from(w: Workshop, confirmedCount: Int) = WorkshopResponse(
+            id = w.id,
+            name = w.name,
+            code = w.code,
+            description = w.description,
+            capacity = w.capacity,
+            registeredParticipants = confirmedCount,
+            availableSeats = maxOf(0, w.capacity - confirmedCount),
+            occupancyPercentage = if (w.capacity > 0)
+                (confirmedCount.toDouble() / w.capacity * 100.0) else 0.0,
+            status = when {
+                confirmedCount >= w.capacity -> WorkshopStatus.FULLY_BOOKED
+                confirmedCount >= (w.capacity * 0.8).toInt() -> WorkshopStatus.ALMOST_FULL
+                else -> WorkshopStatus.AVAILABLE
+            },
+            instructor = w.instructor,
+            venue = w.venue
+        )
+    }
+}
+
+data class WorkshopParticipantDto(
+    val serialNumber: Int,
+    val registrationId: String,
+    val fullName: String,
+    val email: String,
+    val phone: String,
+    val college: String,
+    val registeredAt: Instant,
+    val status: WorkshopRegStatus
+)
+
+data class RegisterWorkshopRequest(
+    @field:NotNull(message = "Attendee ID is required")
+    val attendeeId: Long
+)

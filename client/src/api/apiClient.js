@@ -6,7 +6,7 @@ const API_BASE = import.meta.env.VITE_API_URL || '/api'
 const apiClient = axios.create({
   baseURL: API_BASE,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 4000,
+  timeout: 5000,
 })
 
 // ── In-Memory Mock Store for Seamless Offline Demo / Portfolio Preview ─────────
@@ -26,6 +26,9 @@ const mockStore = {
       email: 'arjun.sharma@srm.edu.in',
       phone: '9876543210',
       college: 'SRM Institute of Science and Technology',
+      gender: 'MALE',
+      department: 'Computer Science & Engineering',
+      yearOfStudy: '3rd Year',
       registrationType: 'PRE_REGISTERED',
       workshops: ['AI & ML Workshop', 'Cloud Computing Bootcamp'],
       competitions: ['Hackathon 48hr', 'Coding Contest'],
@@ -43,6 +46,9 @@ const mockStore = {
       email: 'priya.k@vit.ac.in',
       phone: '9765432109',
       college: 'VIT Vellore',
+      gender: 'FEMALE',
+      department: 'Electronics & Communication',
+      yearOfStudy: '4th Year',
       registrationType: 'PRE_REGISTERED',
       workshops: ['Web Dev Masterclass'],
       competitions: ['UI/UX Design Challenge'],
@@ -60,6 +66,9 @@ const mockStore = {
       email: 'rahul.mehta@iit.ac.in',
       phone: '9654321098',
       college: 'IIT Madras',
+      gender: 'MALE',
+      department: 'Information Technology',
+      yearOfStudy: '2nd Year',
       registrationType: 'PRE_REGISTERED',
       workshops: ['Cybersecurity Essentials', 'AI & ML Workshop'],
       competitions: ['CTF Challenge'],
@@ -77,6 +86,9 @@ const mockStore = {
       email: 'sneha.patel@bits.ac.in',
       phone: '9543210987',
       college: 'BITS Pilani',
+      gender: 'FEMALE',
+      department: 'Computer Science',
+      yearOfStudy: '3rd Year',
       registrationType: 'PRE_REGISTERED',
       workshops: ['Cloud Computing Bootcamp'],
       competitions: ['Startup Pitch'],
@@ -94,6 +106,9 @@ const mockStore = {
       email: 'karthik.r@nit.ac.in',
       phone: '9432109876',
       college: 'NIT Trichy',
+      gender: 'MALE',
+      department: 'Mechanical Engineering',
+      yearOfStudy: '4th Year',
       registrationType: 'PRE_REGISTERED',
       workshops: ['Robotics & IoT Lab'],
       competitions: ['Robo Wars', 'Coding Contest'],
@@ -102,6 +117,26 @@ const mockStore = {
       checkedInGate: null,
       housingRequired: true,
       createdAt: '2026-10-30T10:20:00Z',
+    },
+    {
+      id: 6,
+      registrationId: 'VTX-2026-0006',
+      qrCode: 'QR-VTX-0006-F7R1',
+      fullName: 'Taylor Swift (Unspecified Gender)',
+      email: 'taylor@guest.edu',
+      phone: '9123456780',
+      college: 'Global University',
+      gender: null, // Test case: missing gender requires manual review
+      department: 'Arts & Media',
+      yearOfStudy: '1st Year',
+      registrationType: 'PRE_REGISTERED',
+      workshops: ['UI/UX Design'],
+      competitions: ['UI/UX Design Challenge'],
+      checkedIn: false,
+      checkedInAt: null,
+      checkedInGate: null,
+      housingRequired: true,
+      createdAt: '2026-10-30T10:25:00Z',
     },
   ],
   housingBlocks: [
@@ -169,8 +204,13 @@ const mockStore = {
       blockName: 'Hostel Garnet A (Boys)',
       blockType: 'BOYS',
       roomNumber: 'GA-101',
+      fromDate: '2026-10-30',
+      toDate: '2026-11-02',
+      status: 'CHECKED_IN',
       checkedIn: true,
+      checkedInAt: '2026-10-30T10:00:00Z',
       checkedOut: false,
+      checkedOutAt: null,
       allocatedAt: '2026-10-30T09:00:00Z',
     },
     {
@@ -181,10 +221,97 @@ const mockStore = {
       blockName: 'Hostel Opal C (Girls)',
       blockType: 'GIRLS',
       roomNumber: 'OC-101',
+      fromDate: '2026-10-30',
+      toDate: '2026-11-02',
+      status: 'CHECKED_IN',
       checkedIn: true,
+      checkedInAt: '2026-10-30T09:30:00Z',
       checkedOut: false,
+      checkedOutAt: null,
       allocatedAt: '2026-10-30T09:10:00Z',
     },
+    {
+      id: 3,
+      attendeeId: 4,
+      attendeeName: 'Sneha Patel',
+      registrationId: 'VTX-2026-0004',
+      blockName: 'Hostel Opal C (Girls)',
+      blockType: 'GIRLS',
+      roomNumber: 'OC-102',
+      fromDate: '2026-10-30',
+      toDate: '2026-11-01',
+      status: 'ALLOCATED',
+      checkedIn: false,
+      checkedInAt: null,
+      checkedOut: false,
+      checkedOutAt: null,
+      allocatedAt: '2026-10-30T09:40:00Z',
+    },
+  ],
+  workshops: [
+    {
+      id: 1,
+      name: 'AI & ML Workshop',
+      code: 'WS-AIML',
+      description: 'Deep Learning, LLMs & Model Deployment with PyTorch',
+      capacity: 100,
+      instructor: 'Dr. Rajiv Menon',
+      venue: 'Auditorium Hall A',
+    },
+    {
+      id: 2,
+      name: 'Web Dev Masterclass',
+      code: 'WS-WEB',
+      description: 'Full-Stack Modern Web Engineering with React 19 & Spring Boot',
+      capacity: 50,
+      instructor: 'Ananya Roy',
+      venue: 'Lab 3 - IT Block',
+    },
+    {
+      id: 3,
+      name: 'Cybersecurity Essentials',
+      code: 'WS-SEC',
+      description: 'Ethical Hacking, Network Security & Incident Defense',
+      capacity: 30,
+      instructor: 'Karan Malhotra',
+      venue: 'Cyber Defense Lab',
+    },
+    {
+      id: 4,
+      name: 'Cloud Computing Bootcamp',
+      code: 'WS-CLOUD',
+      description: 'AWS Microservices, Kubernetes, and Serverless Infrastructure',
+      capacity: 40,
+      instructor: 'Sneha Deshmukh',
+      venue: 'Seminar Hall 2',
+    },
+    {
+      id: 5,
+      name: 'Robotics & IoT Lab',
+      code: 'WS-ROBO',
+      description: 'Embedded Systems, Sensors, Arduino & Autonomous Hardware',
+      capacity: 25,
+      instructor: 'Prof. R. Sundaram',
+      venue: 'Robotics Innovation Center',
+    },
+    {
+      id: 6,
+      name: 'UI/UX Design',
+      code: 'WS-UIUX',
+      description: 'Design Systems, Figma Wireframing, and Micro-interactions',
+      capacity: 35,
+      instructor: 'Tara Varma',
+      venue: 'Design Studio B',
+    },
+  ],
+  workshopRegistrations: [
+    { id: 1, workshopId: 1, attendeeId: 1, status: 'CONFIRMED', registeredAt: '2026-10-30T10:00:00Z' },
+    { id: 2, workshopId: 4, attendeeId: 1, status: 'CONFIRMED', registeredAt: '2026-10-30T10:00:00Z' },
+    { id: 3, workshopId: 2, attendeeId: 2, status: 'CONFIRMED', registeredAt: '2026-10-30T10:05:00Z' },
+    { id: 4, workshopId: 3, attendeeId: 3, status: 'CONFIRMED', registeredAt: '2026-10-30T10:10:00Z' },
+    { id: 5, workshopId: 1, attendeeId: 3, status: 'CONFIRMED', registeredAt: '2026-10-30T10:10:00Z' },
+    { id: 6, workshopId: 4, attendeeId: 4, status: 'CONFIRMED', registeredAt: '2026-10-30T10:15:00Z' },
+    { id: 7, workshopId: 5, attendeeId: 5, status: 'CONFIRMED', registeredAt: '2026-10-30T10:20:00Z' },
   ],
 }
 
@@ -219,26 +346,26 @@ apiClient.interceptors.response.use(
   }
 )
 
-// ── API Functions with Intelligent Fallback for Offline / Demo Preview ────────
+const isUnreachable = (err) =>
+  !err.response ||
+  err.response.status === 500 ||
+  err.response.status === 502 ||
+  err.response.status === 503 ||
+  err.response.status === 504 ||
+  err.code === 'ECONNABORTED' ||
+  err.code === 'ERR_NETWORK'
+
+// ── Auth APIs ─────────────────────────────────────────────────────────────────
 export const authApi = {
   login: async (data) => {
     try {
       return await apiClient.post('/auth/login', data)
     } catch (err) {
-      // If backend is offline, proxy fails (500/502/504), network error, or ECONNREFUSED:
-      const isBackendUnreachable =
-        !err.response ||
-        err.response.status === 502 ||
-        err.response.status === 503 ||
-        err.response.status === 504 ||
-        (err.response.status === 500 && !err.response.data?.fieldErrors)
-
-      if (isBackendUnreachable) {
-        // Match demo accounts
+      if (isUnreachable(err)) {
         const email = data.email.toLowerCase()
         const role = email.includes('gate')
           ? 'GATE_STAFF'
-          : email.includes('housing')
+          : email.includes('housing') || email.includes('accomm')
           ? 'HOUSING_STAFF'
           : email.includes('reg')
           ? 'REGISTRATION_STAFF'
@@ -264,15 +391,7 @@ export const authApi = {
   getProfile: () => apiClient.get('/auth/me'),
 }
 
-const isUnreachable = (err) =>
-  !err.response ||
-  err.response.status === 500 ||
-  err.response.status === 502 ||
-  err.response.status === 503 ||
-  err.response.status === 504 ||
-  err.code === 'ECONNABORTED' ||
-  err.code === 'ERR_NETWORK'
-
+// ── Attendee APIs ─────────────────────────────────────────────────────────────
 export const attendeeApi = {
   getAll: async (params = {}) => {
     try {
@@ -310,6 +429,72 @@ export const attendeeApi = {
     }
   },
   getById: (id) => apiClient.get(`/attendees/${id}`),
+  getProfile: async (id) => {
+    try {
+      return await apiClient.get(`/attendees/${id}/profile`)
+    } catch (err) {
+      if (isUnreachable(err)) {
+        const attendee = mockStore.attendees.find((a) => a.id === Number(id))
+        if (!attendee) {
+          const e = new Error('Attendee not found')
+          e.response = { data: { message: 'Attendee not found' } }
+          throw e
+        }
+        const allocations = (mockStore.allocations || []).filter((al) => al.attendeeId === attendee.id)
+        const currentAlloc = allocations.find((al) => al.status === 'ALLOCATED' || al.status === 'CHECKED_IN') || null
+
+        const wsRegs = (mockStore.workshopRegistrations || [])
+          .filter((wr) => wr.attendeeId === attendee.id)
+          .map((wr) => {
+            const ws = mockStore.workshops.find((w) => w.id === wr.workshopId)
+            return {
+              id: wr.id,
+              workshopId: wr.workshopId,
+              workshopName: ws ? ws.name : 'Workshop #' + wr.workshopId,
+              workshopCode: ws ? ws.code : 'WS-00',
+              status: wr.status,
+              registeredAt: wr.registeredAt,
+              attendanceStatus: attendee.checkedIn ? 'PRESENT' : 'REGISTERED',
+            }
+          })
+
+        const evtRegs = (attendee.competitions || []).map((comp, idx) => ({
+          id: idx + 1,
+          eventName: comp,
+          status: 'CONFIRMED',
+          registeredAt: attendee.createdAt,
+          attendanceStatus: attendee.checkedIn ? 'PRESENT' : 'REGISTERED',
+        }))
+
+        const gateLogs = attendee.checkedIn
+          ? [
+              {
+                id: 1,
+                action: 'CHECK_IN',
+                gateLocation: attendee.checkedInGate || 'Main Gate',
+                operatorName: 'Gate Officer',
+                note: 'Verified entry ticket',
+                loggedAt: attendee.checkedInAt || attendee.createdAt,
+              },
+            ]
+          : []
+
+        return {
+          data: {
+            personalInfo: attendee,
+            currentAccommodation: currentAlloc,
+            accommodationHistory: allocations,
+            workshopRegistrations: wsRegs,
+            totalWorkshops: wsRegs.length,
+            eventRegistrations: evtRegs,
+            totalEvents: evtRegs.length,
+            gateLogs: gateLogs,
+          },
+        }
+      }
+      throw err
+    }
+  },
   search: (q) => apiClient.get('/attendees/search', { params: { q } }),
   registerWalkIn: async (data) => {
     try {
@@ -326,6 +511,9 @@ export const attendeeApi = {
           email: data.email,
           phone: data.phone,
           college: data.college,
+          gender: data.gender || 'MALE',
+          department: data.department || 'Computer Science & Engineering',
+          yearOfStudy: data.yearOfStudy || '3rd Year',
           registrationType: 'WALK_IN',
           workshops: data.workshops || [],
           competitions: data.competitions || [],
@@ -386,6 +574,7 @@ export const attendeeApi = {
   },
 }
 
+// ── Dashboard APIs ────────────────────────────────────────────────────────────
 export const dashboardApi = {
   getStats: async () => {
     try {
@@ -397,6 +586,9 @@ export const dashboardApi = {
         const preRegistered = mockStore.attendees.filter((a) => a.registrationType === 'PRE_REGISTERED').length
         const walkIns = mockStore.attendees.filter((a) => a.registrationType === 'WALK_IN').length
         const housingReq = mockStore.attendees.filter((a) => a.housingRequired).length
+        const activeAllocs = (mockStore.allocations || []).filter(
+          (al) => al.status === 'ALLOCATED' || al.status === 'CHECKED_IN'
+        ).length
 
         return {
           data: {
@@ -406,7 +598,7 @@ export const dashboardApi = {
             checkedIn,
             pendingEntry: total - checkedIn,
             housingRequired: housingReq,
-            housingAllocated: 2,
+            housingAllocated: activeAllocs,
             checkInPercentage: total > 0 ? (checkedIn / total) * 100 : 0,
             workshopStats: {
               'AI & ML Workshop': 18,
@@ -424,6 +616,7 @@ export const dashboardApi = {
               'UI/UX Design Challenge': 8,
             },
             blockOccupancy: mockStore.housingBlocks.map((b) => ({
+              blockId: b.id,
               blockName: b.blockName,
               blockType: b.blockType,
               totalCapacity: b.totalCapacity,
@@ -439,23 +632,87 @@ export const dashboardApi = {
   },
 }
 
+// ── Accommodation (Previously Housing) APIs ───────────────────────────────────
 export const housingApi = {
-  getBlocks: async () => {
+  getBlocks: async (gender) => {
     try {
-      return await apiClient.get('/housing/blocks')
+      return await apiClient.get('/housing/blocks', { params: { gender } })
     } catch (err) {
       if (isUnreachable(err)) {
-        return { data: mockStore.housingBlocks }
+        let blocks = mockStore.housingBlocks
+        if (gender === 'MALE') blocks = blocks.filter((b) => b.blockType === 'BOYS' || b.blockType === 'VIP')
+        if (gender === 'FEMALE') blocks = blocks.filter((b) => b.blockType === 'GIRLS' || b.blockType === 'VIP')
+        return { data: blocks }
       }
       throw err
     }
   },
-  getAllocations: async () => {
+  getDashboard: async () => {
     try {
-      return await apiClient.get('/housing/allocations')
+      return await apiClient.get('/housing/dashboard')
     } catch (err) {
       if (isUnreachable(err)) {
-        return { data: mockStore.allocations || [] }
+        let totalRooms = 0
+        let totalCapacity = 0
+        let occupiedBeds = 0
+        const roomOccupancy = []
+
+        mockStore.housingBlocks.forEach((b) => {
+          b.rooms.forEach((r) => {
+            totalRooms++
+            totalCapacity += r.capacity
+            occupiedBeds += r.occupied
+            roomOccupancy.push({
+              roomId: r.id,
+              roomNumber: r.roomNumber,
+              blockName: b.blockName,
+              blockType: b.blockType,
+              capacity: r.capacity,
+              occupied: r.occupied,
+              availableBeds: Math.max(0, r.capacity - r.occupied),
+              isFull: r.isFull,
+            })
+          })
+        })
+
+        const hostelOccupancy = mockStore.housingBlocks.map((b) => ({
+          blockId: b.id,
+          blockName: b.blockName,
+          blockType: b.blockType,
+          totalCapacity: b.totalCapacity,
+          occupiedBeds: b.occupiedBeds,
+          availableBeds: b.availableBeds,
+          occupancyPercentage: (b.occupiedBeds / b.totalCapacity) * 100,
+        }))
+
+        const upcomingCheckIns = (mockStore.allocations || []).filter((al) => al.status === 'ALLOCATED')
+        const upcomingCheckOuts = (mockStore.allocations || []).filter((al) => al.status === 'CHECKED_IN')
+
+        return {
+          data: {
+            totalHostels: mockStore.housingBlocks.length,
+            totalRooms,
+            totalBedCapacity: totalCapacity,
+            occupiedBeds,
+            availableBeds: Math.max(0, totalCapacity - occupiedBeds),
+            hostelOccupancy,
+            roomOccupancy,
+            upcomingCheckIns,
+            upcomingCheckOuts,
+          },
+        }
+      }
+      throw err
+    }
+  },
+  getAllocations: async (status) => {
+    try {
+      return await apiClient.get('/housing/allocations', { params: { status } })
+    } catch (err) {
+      if (isUnreachable(err)) {
+        let list = mockStore.allocations || []
+        if (status) list = list.filter((al) => al.status === status)
+        return { data: list }
       }
       throw err
     }
@@ -465,7 +722,18 @@ export const housingApi = {
       return await apiClient.post('/housing/allocate', data)
     } catch (err) {
       if (isUnreachable(err)) {
-        // Find attendee and room
+        // Date validation
+        if (!data.fromDate || !data.toDate) {
+          const dErr = new Error('Both From Date and To Date are mandatory')
+          dErr.response = { data: { message: 'Both From Date and To Date are mandatory' } }
+          throw dErr
+        }
+        if (data.toDate < data.fromDate) {
+          const dErr = new Error('To Date cannot be earlier than From Date')
+          dErr.response = { data: { message: 'To Date cannot be earlier than From Date' } }
+          throw dErr
+        }
+
         const attendee = mockStore.attendees.find((a) => a.id === Number(data.attendeeId))
         let targetBlock = null
         let targetRoom = null
@@ -485,6 +753,25 @@ export const housingApi = {
           throw errFull
         }
 
+        // Gender validation
+        if (attendee) {
+          if (!attendee.gender && !data.manualGenderOverride) {
+            const gErr = new Error('Attendee gender is missing. Manual review required.')
+            gErr.response = { data: { message: 'Attendee gender is not specified in profile. Manual review is required.' } }
+            throw gErr
+          }
+          if (attendee.gender === 'MALE' && targetBlock.blockType === 'GIRLS') {
+            const gErr = new Error('Male attendee cannot be allocated to Girls Hostel')
+            gErr.response = { data: { message: 'Gender mismatch: Male attendees cannot be allocated to Girls Hostel (Opal C).' } }
+            throw gErr
+          }
+          if (attendee.gender === 'FEMALE' && targetBlock.blockType === 'BOYS') {
+            const gErr = new Error('Female attendee cannot be allocated to Boys Hostel')
+            gErr.response = { data: { message: 'Gender mismatch: Female attendees cannot be allocated to Boys Hostel (Garnet A).' } }
+            throw gErr
+          }
+        }
+
         // Increment occupancy
         targetRoom.occupied += 1
         targetRoom.isFull = targetRoom.occupied >= targetRoom.capacity
@@ -499,8 +786,13 @@ export const housingApi = {
           blockName: targetBlock.blockName,
           blockType: targetBlock.blockType,
           roomNumber: targetRoom.roomNumber,
+          fromDate: data.fromDate,
+          toDate: data.toDate,
+          status: 'ALLOCATED',
           checkedIn: false,
+          checkedInAt: null,
           checkedOut: false,
+          checkedOutAt: null,
           allocatedAt: new Date().toISOString(),
         }
 
@@ -513,6 +805,36 @@ export const housingApi = {
     }
   },
   getByAttendee: (id) => apiClient.get(`/housing/attendee/${id}`),
+  getHistory: (id) => apiClient.get(`/housing/history/${id}`),
+  updateRoomCapacity: async (id, capacity) => {
+    try {
+      return await apiClient.patch(`/housing/rooms/${id}/capacity`, { capacity })
+    } catch (err) {
+      if (isUnreachable(err)) {
+        if (capacity < 1 || capacity > 20) {
+          const cErr = new Error('Capacity must be between 1 and 20')
+          cErr.response = { data: { message: 'Room capacity must be between 1 and 20' } }
+          throw cErr
+        }
+        for (const block of mockStore.housingBlocks) {
+          const room = block.rooms.find((r) => r.id === Number(id))
+          if (room) {
+            if (capacity < room.occupied) {
+              const cErr = new Error('Cannot reduce capacity below current occupied beds')
+              cErr.response = { data: { message: `Cannot reduce room capacity to ${capacity}: Room has ${room.occupied} occupied beds.` } }
+              throw cErr
+            }
+            block.totalCapacity += capacity - room.capacity
+            room.capacity = capacity
+            room.isFull = room.occupied >= room.capacity
+            block.availableBeds = block.totalCapacity - block.occupiedBeds
+            return { data: room }
+          }
+        }
+      }
+      throw err
+    }
+  },
   roomCheckIn: async (id) => {
     try {
       return await apiClient.patch(`/housing/allocations/${id}/check-in`)
@@ -521,6 +843,7 @@ export const housingApi = {
         const alloc = (mockStore.allocations || []).find((a) => a.id === Number(id))
         if (alloc) {
           alloc.checkedIn = true
+          alloc.status = 'CHECKED_IN'
           alloc.checkedInAt = new Date().toISOString()
         }
         return { data: alloc }
@@ -534,8 +857,9 @@ export const housingApi = {
     } catch (err) {
       if (isUnreachable(err)) {
         const alloc = (mockStore.allocations || []).find((a) => a.id === Number(id))
-        if (alloc && !alloc.checkedOut) {
+        if (alloc && alloc.status !== 'CHECKED_OUT') {
           alloc.checkedOut = true
+          alloc.status = 'CHECKED_OUT'
           alloc.checkedOutAt = new Date().toISOString()
           // release bed
           for (const block of mockStore.housingBlocks) {
@@ -550,6 +874,294 @@ export const housingApi = {
           }
         }
         return { data: alloc }
+      }
+      throw err
+    }
+  },
+}
+
+// Module alias for Accommodation (Section 1.1)
+export const accommodationApi = housingApi
+
+// ── Workshop Seat Capacity Management APIs ────────────────────────────────────
+export const workshopsApi = {
+  getAll: async () => {
+    try {
+      return await apiClient.get('/workshops')
+    } catch (err) {
+      if (isUnreachable(err)) {
+        return {
+          data: mockStore.workshops.map((w) => {
+            const confirmedCount = (mockStore.workshopRegistrations || []).filter(
+              (r) => r.workshopId === w.id && r.status === 'CONFIRMED'
+            ).length
+            const avail = Math.max(0, w.capacity - confirmedCount)
+            const pct = (confirmedCount / w.capacity) * 100
+            const status =
+              confirmedCount >= w.capacity
+                ? 'FULLY_BOOKED'
+                : confirmedCount >= w.capacity * 0.8
+                ? 'ALMOST_FULL'
+                : 'AVAILABLE'
+
+            return {
+              ...w,
+              registeredParticipants: confirmedCount,
+              availableSeats: avail,
+              occupancyPercentage: pct,
+              status,
+            }
+          }),
+        }
+      }
+      throw err
+    }
+  },
+  getById: async (id) => {
+    try {
+      return await apiClient.get(`/workshops/${id}`)
+    } catch (err) {
+      if (isUnreachable(err)) {
+        const w = mockStore.workshops.find((item) => item.id === Number(id))
+        if (!w) {
+          const e = new Error('Workshop not found')
+          e.response = { data: { message: 'Workshop not found' } }
+          throw e
+        }
+        const confirmedCount = (mockStore.workshopRegistrations || []).filter(
+          (r) => r.workshopId === w.id && r.status === 'CONFIRMED'
+        ).length
+        return {
+          data: {
+            ...w,
+            registeredParticipants: confirmedCount,
+            availableSeats: Math.max(0, w.capacity - confirmedCount),
+            occupancyPercentage: (confirmedCount / w.capacity) * 100,
+            status: confirmedCount >= w.capacity ? 'FULLY_BOOKED' : 'AVAILABLE',
+          },
+        }
+      }
+      throw err
+    }
+  },
+  create: async (data) => {
+    try {
+      return await apiClient.post('/workshops', data)
+    } catch (err) {
+      if (isUnreachable(err)) {
+        if (data.capacity < 1 || data.capacity > 100) {
+          const e = new Error('Capacity must be between 1 and 100')
+          e.response = { data: { message: 'Workshop capacity must be between 1 and 100' } }
+          throw e
+        }
+        const newWs = {
+          id: Date.now(),
+          name: data.name,
+          code: data.code,
+          description: data.description,
+          capacity: Number(data.capacity) || 100,
+          instructor: data.instructor || 'Industry Expert',
+          venue: data.venue || 'Auditorium Hall',
+          registeredParticipants: 0,
+          availableSeats: Number(data.capacity) || 100,
+          occupancyPercentage: 0,
+          status: 'AVAILABLE',
+        }
+        mockStore.workshops.push(newWs)
+        return { data: newWs }
+      }
+      throw err
+    }
+  },
+  updateCapacity: async (id, capacity) => {
+    try {
+      return await apiClient.put(`/workshops/${id}/capacity`, { capacity: Number(capacity) })
+    } catch (err) {
+      if (isUnreachable(err)) {
+        const cap = Number(capacity)
+        if (cap < 1 || cap > 100) {
+          const e = new Error('Capacity must be between 1 and 100')
+          e.response = { data: { message: 'Workshop capacity must be between 1 and 100 participants' } }
+          throw e
+        }
+        const w = mockStore.workshops.find((item) => item.id === Number(id))
+        if (!w) throw new Error('Workshop not found')
+
+        const confirmedCount = (mockStore.workshopRegistrations || []).filter(
+          (r) => r.workshopId === w.id && r.status === 'CONFIRMED'
+        ).length
+
+        if (cap < confirmedCount) {
+          const e = new Error(`Cannot reduce capacity below confirmed count (${confirmedCount})`)
+          e.response = {
+            data: { message: `Cannot reduce capacity to ${cap}: There are already ${confirmedCount} confirmed participants.` },
+          }
+          throw e
+        }
+        w.capacity = cap
+        return {
+          data: {
+            ...w,
+            registeredParticipants: confirmedCount,
+            availableSeats: cap - confirmedCount,
+            occupancyPercentage: (confirmedCount / cap) * 100,
+            status: confirmedCount >= cap ? 'FULLY_BOOKED' : 'AVAILABLE',
+          },
+        }
+      }
+      throw err
+    }
+  },
+  getParticipants: async (id, params = {}) => {
+    try {
+      return await apiClient.get(`/workshops/${id}/participants`, { params })
+    } catch (err) {
+      if (isUnreachable(err)) {
+        const regs = (mockStore.workshopRegistrations || []).filter((r) => r.workshopId === Number(id))
+        let participants = regs.map((r, idx) => {
+          const att = mockStore.attendees.find((a) => a.id === r.attendeeId) || {
+            fullName: 'Attendee #' + r.attendeeId,
+            registrationId: 'VTX-2026-X',
+            email: 'attendee@vortex.edu',
+            phone: '9876543210',
+            college: 'Symposium College',
+          }
+          return {
+            serialNumber: idx + 1,
+            registrationId: att.registrationId,
+            fullName: att.fullName,
+            email: att.email,
+            phone: att.phone,
+            college: att.college,
+            registeredAt: r.registeredAt,
+            status: r.status,
+            attendeeId: r.attendeeId,
+          }
+        })
+
+        if (params.search) {
+          const s = params.search.toLowerCase()
+          participants = participants.filter(
+            (p) =>
+              p.fullName.toLowerCase().includes(s) ||
+              p.registrationId.toLowerCase().includes(s) ||
+              p.email.toLowerCase().includes(s)
+          )
+        }
+        if (params.status) {
+          participants = participants.filter((p) => p.status === params.status)
+        }
+
+        return {
+          data: {
+            data: participants,
+            page: 0,
+            size: 20,
+            totalElements: participants.length,
+            totalPages: 1,
+          },
+        }
+      }
+      throw err
+    }
+  },
+  exportCsv: async (id) => {
+    try {
+      return await apiClient.get(`/workshops/${id}/export`, { responseType: 'blob' })
+    } catch (err) {
+      if (isUnreachable(err)) {
+        const regs = (mockStore.workshopRegistrations || []).filter(
+          (r) => r.workshopId === Number(id) && r.status === 'CONFIRMED'
+        )
+        let csv = 'Serial Number,Registration ID,Full Name,Email,Phone,College,Registration Date,Status\n'
+        regs.forEach((r, idx) => {
+          const att = mockStore.attendees.find((a) => a.id === r.attendeeId) || {
+            fullName: 'Attendee #' + r.attendeeId,
+            registrationId: 'VTX-2026-X',
+            email: 'attendee@vortex.edu',
+            phone: '9876543210',
+            college: 'Symposium College',
+          }
+          csv += `${idx + 1},"${att.registrationId}","${att.fullName}","${att.email}","${att.phone}","${att.college}","${r.registeredAt}","${r.status}"\n`
+        })
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+        return { data: blob }
+      }
+      throw err
+    }
+  },
+  registerParticipant: async (id, attendeeId) => {
+    try {
+      return await apiClient.post(`/workshops/${id}/register`, { attendeeId: Number(attendeeId) })
+    } catch (err) {
+      if (isUnreachable(err)) {
+        const wId = Number(id)
+        const aId = Number(attendeeId)
+        const w = mockStore.workshops.find((item) => item.id === wId)
+        if (!w) throw new Error('Workshop not found')
+
+        // 1. Prevent duplicate registration
+        const existing = (mockStore.workshopRegistrations || []).find(
+          (r) => r.workshopId === wId && r.attendeeId === aId && r.status === 'CONFIRMED'
+        )
+        if (existing) {
+          const e = new Error('Duplicate registration')
+          e.response = { data: { message: 'Attendee is already registered for this workshop' } }
+          throw e
+        }
+
+        // 2. Prevent overbooking
+        const confirmedCount = (mockStore.workshopRegistrations || []).filter(
+          (r) => r.workshopId === wId && r.status === 'CONFIRMED'
+        ).length
+        if (confirmedCount >= w.capacity) {
+          const e = new Error('Overbooked')
+          e.response = {
+            data: { message: 'Sorry, this workshop is fully booked. No seats are currently available.' },
+          }
+          throw e
+        }
+
+        const newReg = {
+          id: Date.now(),
+          workshopId: wId,
+          attendeeId: aId,
+          status: 'CONFIRMED',
+          registeredAt: new Date().toISOString(),
+        }
+        if (!mockStore.workshopRegistrations) mockStore.workshopRegistrations = []
+        mockStore.workshopRegistrations.push(newReg)
+
+        const att = mockStore.attendees.find((a) => a.id === aId)
+        return {
+          data: {
+            serialNumber: confirmedCount + 1,
+            registrationId: att ? att.registrationId : 'VTX-2026-X',
+            fullName: att ? att.fullName : 'Participant',
+            email: att ? att.email : '',
+            phone: att ? att.phone : '',
+            college: att ? att.college : '',
+            registeredAt: newReg.registeredAt,
+            status: 'CONFIRMED',
+          },
+        }
+      }
+      throw err
+    }
+  },
+  cancelRegistration: async (id, attendeeId) => {
+    try {
+      return await apiClient.post(`/workshops/${id}/cancel`, { attendeeId: Number(attendeeId) })
+    } catch (err) {
+      if (isUnreachable(err)) {
+        const reg = (mockStore.workshopRegistrations || []).find(
+          (r) => r.workshopId === Number(id) && r.attendeeId === Number(attendeeId) && r.status === 'CONFIRMED'
+        )
+        if (reg) {
+          reg.status = 'CANCELLED'
+          reg.cancelledAt = new Date().toISOString()
+        }
+        return { data: reg }
       }
       throw err
     }

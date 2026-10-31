@@ -17,7 +17,10 @@ import java.util.UUID
 class AttendeeService(
     private val attendeeRepository: AttendeeRepository,
     private val userRepository: UserRepository,
-    private val gateLogRepository: GateLogRepository
+    private val gateLogRepository: GateLogRepository,
+    private val housingAllocationRepository: HousingAllocationRepository,
+    private val workshopRegistrationRepository: WorkshopRegistrationRepository,
+    private val eventRegistrationRepository: EventRegistrationRepository
 ) {
 
     @Transactional
@@ -39,6 +42,9 @@ class AttendeeService(
             email = request.email,
             phone = request.phone,
             college = request.college,
+            gender = request.gender,
+            department = request.department ?: "Computer Science & Engineering",
+            yearOfStudy = request.yearOfStudy ?: "3rd Year",
             registrationType = RegistrationType.WALK_IN,
             paymentMode = request.paymentMode,
             paymentReference = request.paymentReference,
@@ -93,7 +99,6 @@ class AttendeeService(
 
     @Transactional(readOnly = true)
     fun searchAttendee(query: String): AttendeeResponse {
-        // Search by email, registrationId, or qrCode
         val attendee = attendeeRepository.findByEmail(query)
             .or { attendeeRepository.findByRegistrationIdOrQrCode(query) }
             .orElseThrow { ResourceNotFoundException("Attendee", query) }
@@ -127,9 +132,95 @@ class AttendeeService(
         return AttendeeResponse.from(attendee)
     }
 
+    @Transactional(readOnly = true)
+    fun getAttendeeProfile(id: Long): AttendeeProfileResponse {
+        val attendee = attendeeRepository.findById(id)
+            .orElseThrow { ResourceNotFoundException("Attendee", id.toString()) }
+
+        // 1. Accommodation
+        val allocations = housingAllocationRepository.findAllByAttendeeIdOrderByAllocatedAtDesc(id)
+        val currentAlloc = allocations.firstOrNull { it.status == AllocationStatus.ALLOCATED || it.status == AllocationStatus.CHECKED_IN }
+            ?.let { HousingAllocationResponse.from(it) }
+        val historyAllocs = allocations.map { HousingAllocationResponse.from(it) }
+
+        // 2. Workshops
+        var workshopRegs = workshopRegistrationRepository.findAllByAttendeeIdOrderByRegisteredAtDesc(id)
+            .map {
+                WorkshopRegistrationDto(
+                    id = it.id,
+                    workshopId = it.workshop.id,
+                    workshopName = it.workshop.name,
+                    workshopCode = it.workshop.code,
+                    status = it.status,
+                    registeredAt = it.registeredAt,
+                    attendanceStatus = if (attendee.checkedIn) "PRESENT" else "REGISTERED"
+                )
+            }
+        // Fallback to array if no registrations table entries exist for this attendee
+        if (workshopRegs.isEmpty() && attendee.workshops.isNotEmpty()) {
+            workshopRegs = attendee.workshops.mapIndexed { idx, name ->
+                WorkshopRegistrationDto(
+                    id = (idx + 1).toLong(),
+                    workshopId = (idx + 1).toLong(),
+                    workshopName = name,
+                    workshopCode = "WS-0${idx + 1}",
+                    status = WorkshopRegStatus.CONFIRMED,
+                    registeredAt = attendee.createdAt,
+                    attendanceStatus = if (attendee.checkedIn) "PRESENT" else "REGISTERED"
+                )
+            }
+        }
+
+        // 3. Events
+        var eventRegs = eventRegistrationRepository.findAllByAttendeeIdOrderByRegisteredAtDesc(id)
+            .map {
+                EventRegistrationDto(
+                    id = it.id,
+                    eventName = it.eventName,
+                    status = it.status,
+                    registeredAt = it.registeredAt,
+                    attendanceStatus = if (attendee.checkedIn) "PRESENT" else "REGISTERED"
+                )
+            }
+        // Fallback to competitions array
+        if (eventRegs.isEmpty() && attendee.competitions.isNotEmpty()) {
+            eventRegs = attendee.competitions.mapIndexed { idx, name ->
+                EventRegistrationDto(
+                    id = (idx + 1).toLong(),
+                    eventName = name,
+                    status = "CONFIRMED",
+                    registeredAt = attendee.createdAt,
+                    attendanceStatus = if (attendee.checkedIn) "PRESENT" else "REGISTERED"
+                )
+            }
+        }
+
+        // 4. Gate Logs
+        val gateLogs = gateLogRepository.findByAttendeeIdOrderByLoggedAtDesc(id).map {
+            GateLogDto(
+                id = it.id,
+                action = it.action,
+                gateLocation = it.gateLocation,
+                operatorName = it.operator.name,
+                note = it.note,
+                loggedAt = it.loggedAt
+            )
+        }
+
+        return AttendeeProfileResponse(
+            personalInfo = AttendeeResponse.from(attendee),
+            currentAccommodation = currentAlloc,
+            accommodationHistory = historyAllocs,
+            workshopRegistrations = workshopRegs,
+            totalWorkshops = workshopRegs.size,
+            eventRegistrations = eventRegs,
+            totalEvents = eventRegs.size,
+            gateLogs = gateLogs
+        )
+    }
+
     private fun generateRegistrationId(): String {
         val count = attendeeRepository.count() + 1
         return "VTX-2026-${count.toString().padStart(4, '0')}"
     }
 }
-

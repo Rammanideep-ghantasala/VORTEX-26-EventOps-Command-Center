@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/attendees")
-@Tag(name = "Attendees", description = "Attendee management, walk-in registration, search, and gate check-in")
+@Tag(name = "Attendees", description = "Attendee management, complete profile, walk-in registration, and gate check-in")
 class AttendeeController(private val attendeeService: AttendeeService) {
 
     @GetMapping
@@ -37,6 +37,13 @@ class AttendeeController(private val attendeeService: AttendeeService) {
     @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'GATE_STAFF', 'REGISTRATION_STAFF', 'HOUSING_STAFF')")
     fun getById(@PathVariable id: Long): ResponseEntity<AttendeeResponse> {
         return ResponseEntity.ok(attendeeService.getAttendeeById(id))
+    }
+
+    @GetMapping("/{id}/profile")
+    @Operation(summary = "Get complete attendee profile: personal info, accommodation history, workshops, events, gate logs")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'GATE_STAFF', 'REGISTRATION_STAFF', 'HOUSING_STAFF')")
+    fun getProfile(@PathVariable id: Long): ResponseEntity<AttendeeProfileResponse> {
+        return ResponseEntity.ok(attendeeService.getAttendeeProfile(id))
     }
 
     @GetMapping("/search")
@@ -69,4 +76,3 @@ class AttendeeController(private val attendeeService: AttendeeService) {
         return ResponseEntity.ok(attendeeService.checkIn(request, authentication.name))
     }
 }
-

@@ -7,7 +7,8 @@ import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import GatePage from './pages/GatePage'
 import WalkInPage from './pages/WalkInPage'
-import HousingPage from './pages/HousingPage'
+import AccommodationPage from './pages/AccommodationPage'
+import WorkshopsPage from './pages/WorkshopsPage'
 import AttendeesPage from './pages/AttendeesPage'
 
 function AppLayout() {
@@ -51,9 +52,15 @@ export default function App() {
               <WalkInPage />
             </ProtectedRoute>
           } />
-          <Route path="housing" element={
+          <Route path="accommodation" element={
             <ProtectedRoute allowedRoles={['SUPER_ADMIN','HOUSING_STAFF']}>
-              <HousingPage />
+              <AccommodationPage />
+            </ProtectedRoute>
+          } />
+          <Route path="housing" element={<Navigate to="/accommodation" replace />} />
+          <Route path="workshops" element={
+            <ProtectedRoute allowedRoles={['SUPER_ADMIN','REGISTRATION_STAFF']}>
+              <WorkshopsPage />
             </ProtectedRoute>
           } />
           <Route path="attendees" element={<AttendeesPage />} />

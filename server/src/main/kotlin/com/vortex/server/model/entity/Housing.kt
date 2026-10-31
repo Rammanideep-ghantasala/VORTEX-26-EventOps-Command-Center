@@ -3,8 +3,10 @@ package com.vortex.server.model.entity
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.time.Instant
+import java.time.LocalDate
 
 enum class BlockType { BOYS, GIRLS, VIP }
+enum class AllocationStatus { ALLOCATED, CHECKED_IN, CHECKED_OUT, CANCELLED }
 
 @Entity
 @Table(name = "housing_blocks")
@@ -65,8 +67,8 @@ class HousingAllocation(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "attendee_id", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "attendee_id", nullable = false)
     var attendee: Attendee,
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -76,6 +78,16 @@ class HousingAllocation(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "block_id", nullable = false)
     var block: HousingBlock,
+
+    @Column(name = "from_date", nullable = false)
+    var fromDate: LocalDate = LocalDate.now(),
+
+    @Column(name = "to_date", nullable = false)
+    var toDate: LocalDate = LocalDate.now().plusDays(2),
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    var status: AllocationStatus = AllocationStatus.ALLOCATED,
 
     @Column(nullable = false)
     var checkedIn: Boolean = false,
@@ -95,4 +107,3 @@ class HousingAllocation(
     @Column(updatable = false)
     val allocatedAt: Instant = Instant.now()
 )
-

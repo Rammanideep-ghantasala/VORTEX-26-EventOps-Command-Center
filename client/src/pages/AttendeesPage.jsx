@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { attendeeApi } from '../api/apiClient'
-import { Users, Search, Filter, ChevronLeft, ChevronRight, Eye, Loader2 } from 'lucide-react'
+import { Users, Search, Filter, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
 import { Badge, Spinner, EmptyState } from '../components/common/ui'
-import toast from 'react-hot-toast'
+import AttendeeProfileModal from '../components/attendees/AttendeeProfileModal'
 
 export default function AttendeesPage() {
   const [page, setPage] = useState(0)
@@ -76,7 +76,7 @@ export default function AttendeesPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-800 bg-gray-900/50">
-                  {['Reg. ID','Name','College','Type','Status','Housing','Actions'].map(h => (
+                  {['Reg. ID','Name','College','Type','Status','Accommodation','Actions'].map(h => (
                     <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wide whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
@@ -138,45 +138,12 @@ export default function AttendeesPage() {
         )}
       </div>
 
-      {/* Detail Modal */}
+      {/* Complete 5-Tab Attendee Profile Modal */}
       {selected && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={() => setSelected(null)}>
-          <div className="glass-card p-6 max-w-md w-full space-y-4 animate-fade-in" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold text-white text-base">{selected.fullName}</h3>
-              <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-gray-300 text-xl leading-none">×</button>
-            </div>
-            <div className="space-y-2 text-sm">
-              {[
-                ['Reg. ID', selected.registrationId, true],
-                ['QR Code', selected.qrCode, true],
-                ['Email', selected.email],
-                ['Phone', selected.phone],
-                ['College', selected.college],
-                ['Type', selected.registrationType.replace('_',' ')],
-                ['Check-in', selected.checkedIn ? `✅ ${selected.checkedInGate}` : '⏳ Pending'],
-                ['Housing', selected.housingRequired ? 'Required' : 'Not required'],
-              ].map(([l, v, mono]) => (
-                <div key={l} className="flex gap-2">
-                  <span className="text-gray-500 w-20 shrink-0">{l}:</span>
-                  <span className={`text-gray-200 ${mono ? 'font-mono text-xs' : ''}`}>{v}</span>
-                </div>
-              ))}
-            </div>
-            {selected.workshops?.length > 0 && (
-              <div>
-                <p className="text-xs text-gray-500 mb-1.5">Workshops</p>
-                <div className="flex flex-wrap gap-1">{selected.workshops.map(w => <span key={w} className="badge-blue text-xs">{w}</span>)}</div>
-              </div>
-            )}
-            {selected.competitions?.length > 0 && (
-              <div>
-                <p className="text-xs text-gray-500 mb-1.5">Competitions</p>
-                <div className="flex flex-wrap gap-1">{selected.competitions.map(c => <span key={c} className="badge-violet text-xs">{c}</span>)}</div>
-              </div>
-            )}
-          </div>
-        </div>
+        <AttendeeProfileModal
+          attendeeId={selected.id}
+          onClose={() => setSelected(null)}
+        />
       )}
     </div>
   )

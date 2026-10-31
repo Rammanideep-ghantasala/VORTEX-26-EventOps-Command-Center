@@ -15,6 +15,7 @@ const COMPETITIONS = [
 
 const defaultForm = {
   fullName: '', email: '', phone: '', college: '',
+  gender: 'MALE', department: '', yearOfStudy: '3rd Year',
   workshops: [], competitions: [],
   housingRequired: false,
   hostelPreference: 'Hostel Garnet A (Boys)',
@@ -35,6 +36,14 @@ export default function WalkInPage() {
     },
     onError: (err) => toast.error(err.response?.data?.message || 'Registration failed')
   })
+
+  const handleGenderChange = (gender) => {
+    setForm(f => ({
+      ...f,
+      gender,
+      hostelPreference: gender === 'FEMALE' ? 'Hostel Opal C (Girls)' : 'Hostel Garnet A (Boys)'
+    }))
+  }
 
   const toggle = (field, value) => {
     setForm(f => ({
@@ -84,16 +93,42 @@ export default function WalkInPage() {
             <input className="input-field" placeholder="Arjun Sharma" required
               value={form.fullName} onChange={e => setForm(f => ({ ...f, fullName: e.target.value }))} />
           </Field>
-          <Field label="Email" required>
-            <input className="input-field" type="email" placeholder="arjun@college.edu" required
-              value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
-          </Field>
-          <Field label="Phone" required>
-            <input className="input-field" placeholder="9876543210" required pattern="[6-9]\d{9}"
-              value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
-          </Field>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Field label="Email" required>
+              <input className="input-field" type="email" placeholder="arjun@college.edu" required
+                value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+            </Field>
+            <Field label="Phone" required>
+              <input className="input-field" placeholder="9876543210" required pattern="[6-9]\d{9}"
+                value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
+            </Field>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Field label="Gender" required>
+              <select className="input-field" value={form.gender}
+                onChange={e => handleGenderChange(e.target.value)}>
+                <option value="MALE">Male (Boys Hostel)</option>
+                <option value="FEMALE">Female (Girls Hostel)</option>
+                <option value="OTHER">Other / Unspecified</option>
+              </select>
+            </Field>
+            <Field label="Department" required>
+              <input className="input-field" placeholder="Computer Science & Engg." required
+                value={form.department} onChange={e => setForm(f => ({ ...f, department: e.target.value }))} />
+            </Field>
+            <Field label="Year of Study">
+              <select className="input-field" value={form.yearOfStudy}
+                onChange={e => setForm(f => ({ ...f, yearOfStudy: e.target.value }))}>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+                <option value="Post Graduate">Post Graduate</option>
+              </select>
+            </Field>
+          </div>
           <Field label="College / Institution" required>
-            <input className="input-field" placeholder="SRM Institute of Science and Technology" required
+            <input className="input-field" placeholder="National Institute of Technology" required
               value={form.college} onChange={e => setForm(f => ({ ...f, college: e.target.value }))} />
           </Field>
         </Section>

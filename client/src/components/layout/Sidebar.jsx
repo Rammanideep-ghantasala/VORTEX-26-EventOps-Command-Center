@@ -1,16 +1,17 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import {
-  LayoutDashboard, DoorOpen, UserPlus, Home, Users, LogOut, Zap, ShieldCheck
+  LayoutDashboard, DoorOpen, UserPlus, Home, Users, BookOpen, LogOut, Zap, ShieldCheck
 } from 'lucide-react'
 import { cn } from '../common/ui'
 
 const navItems = [
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: null },
-  { to: '/gate',      icon: DoorOpen,        label: 'Gate Admissions',    roles: ['SUPER_ADMIN','GATE_STAFF'] },
-  { to: '/walk-in',   icon: UserPlus,        label: 'Walk-in Reg.',       roles: ['SUPER_ADMIN','REGISTRATION_STAFF'] },
-  { to: '/housing',   icon: Home,            label: 'Housing',            roles: ['SUPER_ADMIN','HOUSING_STAFF'] },
-  { to: '/attendees', icon: Users,           label: 'Attendees',          roles: null },
+  { to: '/dashboard',     icon: LayoutDashboard, label: 'Dashboard',     roles: null },
+  { to: '/gate',          icon: DoorOpen,        label: 'Gate Admissions', roles: ['SUPER_ADMIN','GATE_STAFF'] },
+  { to: '/walk-in',       icon: UserPlus,        label: 'Walk-in Reg.',    roles: ['SUPER_ADMIN','REGISTRATION_STAFF'] },
+  { to: '/accommodation', icon: Home,            label: 'Accommodation',   roles: ['SUPER_ADMIN','HOUSING_STAFF'] },
+  { to: '/workshops',     icon: BookOpen,        label: 'Workshops',       roles: ['SUPER_ADMIN','REGISTRATION_STAFF'] },
+  { to: '/attendees',     icon: Users,           label: 'Attendees',       roles: null },
 ]
 
 const roleColors = {

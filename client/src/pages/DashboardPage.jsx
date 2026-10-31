@@ -45,7 +45,7 @@ export default function DashboardPage() {
           sub={`${s?.checkInPercentage?.toFixed(1)}% of total`} />
         <StatCard icon={Clock}       label="Pending Entry"    value={s?.pendingEntry}      color="amber" />
         <StatCard icon={UserPlus}    label="Walk-ins Today"   value={s?.walkIns}           color="violet" />
-        <StatCard icon={Home}        label="Housing Required" value={s?.housingRequired}   color="cyan" />
+        <StatCard icon={Home}        label="Accommodation Required" value={s?.housingRequired}   color="cyan" />
         <StatCard icon={Bed}         label="Rooms Allocated"  value={s?.housingAllocated}  color="emerald" />
         <StatCard icon={TrendingUp}  label="Pre-Registered"  value={s?.preRegistered}     color="blue" />
         <StatCard icon={BarChart2}   label="Check-in Rate"
@@ -71,9 +71,9 @@ export default function DashboardPage() {
           </ResponsiveContainer>
         </div>
 
-        {/* Housing block occupancy */}
+        {/* Accommodation block occupancy */}
         <div className="glass-card p-5">
-          <h3 className="text-sm font-semibold text-gray-200 mb-4">Housing Block Occupancy</h3>
+          <h3 className="text-sm font-semibold text-gray-200 mb-4">Hostel / Accommodation Occupancy</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={blockData} margin={{ left: 0, right: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
@@ -90,7 +90,7 @@ export default function DashboardPage() {
 
       {/* Block occupancy detail */}
       <div className="glass-card p-5">
-        <h3 className="text-sm font-semibold text-gray-200 mb-4">Housing Block Capacity</h3>
+        <h3 className="text-sm font-semibold text-gray-200 mb-4">Hostel Bed Capacity & Allocation</h3>
         <div className="space-y-3">
           {(s?.blockOccupancy || []).map((block, i) => (
             <div key={i} className="space-y-1">

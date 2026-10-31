@@ -8,6 +8,7 @@ import java.time.Instant
 
 enum class RegistrationType { PRE_REGISTERED, WALK_IN }
 enum class PaymentMode { CASH, UPI, CARD, WAIVER }
+enum class Gender { MALE, FEMALE, OTHER }
 
 @Entity
 @Table(name = "attendees")
@@ -32,6 +33,16 @@ class Attendee(
 
     @Column(nullable = false, length = 150)
     var college: String,
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    var gender: Gender? = Gender.MALE,
+
+    @Column(length = 100)
+    var department: String? = "Computer Science & Engineering",
+
+    @Column(length = 20)
+    var yearOfStudy: String? = "3rd Year",
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
@@ -76,4 +87,3 @@ class Attendee(
     @UpdateTimestamp
     var updatedAt: Instant = Instant.now()
 )
-

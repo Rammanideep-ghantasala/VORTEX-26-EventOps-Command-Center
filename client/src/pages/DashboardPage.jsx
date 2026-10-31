@@ -9,7 +9,7 @@ import {
   Tooltip, ResponsiveContainer, Cell
 } from 'recharts'
 
-const CHART_COLORS = ['#3b82f6','#8b5cf6','#06b6d4','#10b981','#f59e0b','#f43f5e']
+const CHART_COLORS = ['#9f1239', '#be123c', '#fb7185', '#881337', '#e11d48', '#fda4af']
 
 export default function DashboardPage() {
   const { data: stats, isLoading } = useQuery({
@@ -81,7 +81,7 @@ export default function DashboardPage() {
               <YAxis tick={{ fontSize: 11, fill: '#9ca3af' }} />
               <Tooltip contentStyle={{ background: '#111827', border: '1px solid #374151', borderRadius: 8 }}
                 labelStyle={{ color: '#e5e7eb' }} />
-              <Bar dataKey="occupied" name="Occupied" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="occupied" name="Occupied" fill="#9f1239" radius={[4, 4, 0, 0]} />
               <Bar dataKey="available" name="Available" fill="#374151" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>

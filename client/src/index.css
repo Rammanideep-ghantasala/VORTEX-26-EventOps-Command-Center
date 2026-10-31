@@ -4,15 +4,15 @@
 
 @layer base {
   :root {
-    --bg-primary: #0a0f1e;
-    --bg-secondary: #111827;
-    --bg-card: rgba(17, 24, 39, 0.8);
-    --accent-blue: #3b82f6;
-    --accent-violet: #8b5cf6;
-    --accent-cyan: #06b6d4;
+    --bg-primary: #090204;
+    --bg-secondary: #140409;
+    --bg-card: rgba(20, 4, 9, 0.85);
+    --accent-blue: #9f1239;
+    --accent-burgundy: #881337;
+    --accent-crimson: #e11d48;
     --accent-emerald: #15c68b;
-    --accent-rose: #f43f5e;
     --accent-amber: #f59e0b;
+    --accent-rose: #f43f5e;
   }
 
   html,
@@ -31,8 +31,8 @@
 
   body {
     @apply bg-gray-950 text-gray-100 antialiased;
-    background-image: radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+    background-image: radial-gradient(ellipse at 15% 15%, rgba(159, 18, 57, 0.20) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 85%, rgba(76, 5, 25, 0.25) 0%, transparent 60%);
     background-attachment: fixed;
   }
 
@@ -43,27 +43,27 @@
 
 @layer components {
   .glass-card {
-    @apply bg-gray-900/70 backdrop-blur-md border border-gray-700/50 rounded-xl;
+    @apply bg-gray-900/80 backdrop-blur-md border border-gray-800/80 rounded-xl shadow-lg shadow-black/40;
   }
 
   .btn-primary {
-    @apply bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900;
+    @apply bg-gradient-to-r from-red-950 via-rose-900 to-red-900 hover:from-rose-900 hover:to-rose-800 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-200 shadow-md shadow-rose-950/50 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 focus:ring-offset-gray-900 border border-rose-700/50;
   }
 
   .btn-secondary {
-    @apply bg-gray-700 hover:bg-gray-600 text-gray-100 font-semibold px-4 py-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500;
+    @apply bg-gray-850 hover:bg-gray-800 text-gray-200 font-semibold px-4 py-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-600 border border-gray-700/60;
   }
 
   .btn-danger {
-    @apply bg-rose-600/20 hover:bg-rose-600/40 text-rose-400 border border-rose-600/30 font-semibold px-4 py-2 rounded-lg transition-all duration-200;
+    @apply bg-rose-950/40 hover:bg-rose-900/50 text-rose-300 border border-rose-800/50 font-semibold px-4 py-2 rounded-lg transition-all duration-200;
   }
 
   .input-field {
-    @apply w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors duration-200;
+    @apply w-full bg-gray-850 border border-gray-700/80 rounded-lg px-4 py-2.5 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-colors duration-200;
   }
 
   .stat-card {
-    @apply glass-card p-5 flex flex-col gap-2 hover:border-gray-600/50 transition-all duration-200;
+    @apply glass-card p-5 flex flex-col gap-2 hover:border-gray-700/80 transition-all duration-200;
   }
 
   .badge {
@@ -79,7 +79,7 @@
   }
 
   .badge-blue {
-    @apply badge bg-blue-500/20 text-blue-400 border border-blue-500/30;
+    @apply badge bg-rose-900/30 text-rose-300 border border-rose-700/40;
   }
 
   .badge-amber {
@@ -87,7 +87,7 @@
   }
 
   .badge-violet {
-    @apply badge bg-violet-500/20 text-violet-400 border border-violet-500/30;
+    @apply badge bg-purple-900/30 text-purple-300 border border-purple-700/40;
   }
 
   .table-row {

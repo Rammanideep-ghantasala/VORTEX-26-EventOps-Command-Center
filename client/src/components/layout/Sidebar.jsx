@@ -36,12 +36,12 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="flex-shrink-0 px-5 py-5 border-b border-gray-800">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
-            <Zap size={16} className="text-white" />
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-rose-800 via-rose-900 to-red-950 border border-rose-700/50 flex items-center justify-center shadow-md shadow-rose-950/60">
+            <Zap size={16} className="text-rose-200" />
           </div>
           <div>
             <h1 className="font-bold text-white text-base leading-none">VORTEX'26</h1>
-            <p className="text-gray-500 text-xs">Event Operations</p>
+            <p className="text-rose-400/80 text-xs font-medium">Event Operations</p>
           </div>
         </div>
       </div>
@@ -55,7 +55,7 @@ export default function Sidebar() {
             className={({ isActive }) =>
               cn('flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
                 isActive
-                  ? 'bg-blue-600/20 text-blue-400 border border-blue-600/30'
+                  ? 'bg-rose-950/70 text-rose-300 border border-rose-700/50 shadow-sm shadow-rose-950/50'
                   : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/60'
               )
             }
@@ -70,7 +70,7 @@ export default function Sidebar() {
       {user && (
         <div className="mt-auto flex-shrink-0 px-4 py-4 border-t border-gray-800 space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-rose-800 to-red-950 border border-rose-700/50 flex items-center justify-center text-rose-100 text-xs font-bold">
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">

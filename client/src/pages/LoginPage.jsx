@@ -42,12 +42,12 @@ export default function LoginPage() {
       <div className="w-full max-w-md space-y-6 animate-fade-in">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <Zap size={28} className="text-white" />
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-rose-800 via-rose-900 to-red-950 border border-rose-700/50 flex items-center justify-center shadow-xl shadow-rose-950/60">
+            <Zap size={28} className="text-rose-200" />
           </div>
           <h1 className="text-2xl font-bold text-white">VORTEX'26 EMS</h1>
-          <p className="text-gray-400 text-sm">Event Operations Control Center</p>
-          <p className="text-gray-500 text-xs">National Symposium — Authorized Personnel Only</p>
+          <p className="text-rose-300/80 text-sm font-medium">Event Operations Control Center</p>
+          <p className="text-gray-400 text-xs">National Symposium — Authorized Personnel Only</p>
         </div>
 
         {/* Form */}

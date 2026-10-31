@@ -5,12 +5,12 @@ export const cn = (...inputs) => twMerge(clsx(inputs))
 
 export function StatCard({ icon: Icon, label, value, sub, color = 'blue', trend }) {
   const colorMap = {
-    blue: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+    blue: 'text-rose-300 bg-rose-950/40 border-rose-800/40',
     emerald: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
     rose: 'text-rose-400 bg-rose-500/10 border-rose-500/20',
-    violet: 'text-violet-400 bg-violet-500/10 border-violet-500/20',
+    violet: 'text-purple-300 bg-purple-950/40 border-purple-800/40',
     amber: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
-    cyan: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/20',
+    cyan: 'text-pink-300 bg-rose-900/30 border-rose-700/30',
   }
   return (
     <div className="stat-card animate-fade-in">
@@ -43,7 +43,7 @@ export function Badge({ children, variant = 'blue' }) {
 
 export function Spinner({ size = 5 }) {
   return (
-    <div className={`w-${size} h-${size} border-2 border-gray-700 border-t-blue-500 rounded-full animate-spin`} />
+    <div className={`w-${size} h-${size} border-2 border-gray-700 border-t-rose-600 rounded-full animate-spin`} />
   )
 }
 

@@ -10,7 +10,7 @@ const apiClient = axios.create({
 })
 
 // ── In-Memory Mock Store for Seamless Offline Demo / Portfolio Preview ─────────
-const mockStore = {
+const initialMockStore = {
   user: {
     id: 1,
     name: 'Super Admin',
@@ -315,6 +315,34 @@ const mockStore = {
   ],
 }
 
+const STORAGE_KEY = 'vortex26_mock_store_v1'
+const loadStore = () => {
+  try {
+    const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      if (parsed && Array.isArray(parsed.attendees)) {
+        return parsed
+      }
+    }
+  } catch (e) {
+    console.warn('Could not read mockStore from localStorage', e)
+  }
+  return JSON.parse(JSON.stringify(initialMockStore))
+}
+
+const mockStore = loadStore()
+
+export const persistMockStore = () => {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(mockStore))
+    }
+  } catch (e) {
+    console.warn('Could not persist mockStore', e)
+  }
+}
+
 // ── Request Interceptor — inject JWT token ────────────────────────────────────
 apiClient.interceptors.request.use(
   (config) => {
@@ -526,6 +554,7 @@ export const attendeeApi = {
           createdAt: new Date().toISOString(),
         }
         mockStore.attendees.unshift(newAttendee)
+        persistMockStore()
         return { data: newAttendee }
       }
       throw err
@@ -561,6 +590,7 @@ export const attendeeApi = {
         attendee.checkedIn = true
         attendee.checkedInAt = new Date().toISOString()
         attendee.checkedInGate = data.gateLocation || 'Main Gate'
+        persistMockStore()
         return {
           data: {
             success: true,
@@ -798,7 +828,7 @@ export const housingApi = {
 
         if (!mockStore.allocations) mockStore.allocations = []
         mockStore.allocations.unshift(newAlloc)
-
+        persistMockStore()
         return { data: newAlloc }
       }
       throw err
@@ -828,6 +858,7 @@ export const housingApi = {
             room.capacity = capacity
             room.isFull = room.occupied >= room.capacity
             block.availableBeds = block.totalCapacity - block.occupiedBeds
+            persistMockStore()
             return { data: room }
           }
         }
@@ -845,6 +876,7 @@ export const housingApi = {
           alloc.checkedIn = true
           alloc.status = 'CHECKED_IN'
           alloc.checkedInAt = new Date().toISOString()
+          persistMockStore()
         }
         return { data: alloc }
       }
@@ -872,6 +904,7 @@ export const housingApi = {
               break
             }
           }
+          persistMockStore()
         }
         return { data: alloc }
       }
@@ -968,6 +1001,7 @@ export const workshopsApi = {
           status: 'AVAILABLE',
         }
         mockStore.workshops.push(newWs)
+        persistMockStore()
         return { data: newWs }
       }
       throw err
@@ -999,6 +1033,7 @@ export const workshopsApi = {
           throw e
         }
         w.capacity = cap
+        persistMockStore()
         return {
           data: {
             ...w,
@@ -1131,6 +1166,7 @@ export const workshopsApi = {
         }
         if (!mockStore.workshopRegistrations) mockStore.workshopRegistrations = []
         mockStore.workshopRegistrations.push(newReg)
+        persistMockStore()
 
         const att = mockStore.attendees.find((a) => a.id === aId)
         return {
@@ -1160,6 +1196,7 @@ export const workshopsApi = {
         if (reg) {
           reg.status = 'CANCELLED'
           reg.cancelledAt = new Date().toISOString()
+          persistMockStore()
         }
         return { data: reg }
       }

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { attendeeApi } from '../api/apiClient'
 import { UserPlus, Loader2, CheckCircle2 } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -24,6 +24,7 @@ const defaultForm = {
 }
 
 export default function WalkInPage() {
+  const queryClient = useQueryClient()
   const [form, setForm] = useState(defaultForm)
   const [registered, setRegistered] = useState(null)
 
@@ -33,6 +34,9 @@ export default function WalkInPage() {
       setRegistered(data)
       setForm(defaultForm)
       toast.success(`Walk-in registered! ID: ${data.registrationId}`)
+      queryClient.invalidateQueries({ queryKey: ['attendees'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
+      queryClient.invalidateQueries({ queryKey: ['accommodation-blocks'] })
     },
     onError: (err) => toast.error(err.response?.data?.message || 'Registration failed')
   })

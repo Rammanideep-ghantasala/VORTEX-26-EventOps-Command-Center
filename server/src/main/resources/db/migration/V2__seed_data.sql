@@ -7,13 +7,13 @@
 -- Plain text passwords shown in comments for dev only
 INSERT INTO users (name, email, password, role) VALUES
 -- password: Admin@vortex26
-('Super Admin',       'admin@vortex26.com',    '$2a$12$K8qKZm/Xg9gVcEz3A7h8G.VwR4KjLF9mCfJ6bS2jD3XwYtP7NkH9i', 'SUPER_ADMIN'),
+('Super Admin',       'admin@vortex26.com',    '$2a$12$.AZ9XMs1b0IsLzDpXCe55.WTbnH6TPah5FyC5rO/S6HUAm8rKMCy2', 'SUPER_ADMIN'),
 -- password: Gate@vortex26
-('Gate Manager',      'gate@vortex26.com',     '$2a$12$K8qKZm/Xg9gVcEz3A7h8G.VwR4KjLF9mCfJ6bS2jD3XwYtP7NkH9i', 'GATE_STAFF'),
+('Gate Manager',      'gate@vortex26.com',     '$2a$12$.AZ9XMs1b0IsLzDpXCe55.WTbnH6TPah5FyC5rO/S6HUAm8rKMCy2', 'GATE_STAFF'),
 -- password: Housing@vortex26
-('Housing Officer',   'housing@vortex26.com',  '$2a$12$K8qKZm/Xg9gVcEz3A7h8G.VwR4KjLF9mCfJ6bS2jD3XwYtP7NkH9i', 'HOUSING_STAFF'),
+('Housing Officer',   'housing@vortex26.com',  '$2a$12$.AZ9XMs1b0IsLzDpXCe55.WTbnH6TPah5FyC5rO/S6HUAm8rKMCy2', 'HOUSING_STAFF'),
 -- password: Reg@vortex26
-('Registration Desk', 'reg@vortex26.com',      '$2a$12$K8qKZm/Xg9gVcEz3A7h8G.VwR4KjLF9mCfJ6bS2jD3XwYtP7NkH9i', 'REGISTRATION_STAFF');
+('Registration Desk', 'reg@vortex26.com',      '$2a$12$.AZ9XMs1b0IsLzDpXCe55.WTbnH6TPah5FyC5rO/S6HUAm8rKMCy2', 'REGISTRATION_STAFF');
 
 -- Housing blocks
 INSERT INTO housing_blocks (block_name, block_type, total_rooms, total_capacity, occupied_beds) VALUES

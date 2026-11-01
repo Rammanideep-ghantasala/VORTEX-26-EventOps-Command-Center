@@ -24,6 +24,7 @@ export default function AttendeesPage() {
   })
 
   const handleSearch = (e) => { e.preventDefault(); setSearch(searchInput); setPage(0) }
+  const attendeeList = data?.data || data?.content || []
 
   return (
     <div className="space-y-5 animate-fade-in">
@@ -33,7 +34,7 @@ export default function AttendeesPage() {
             <Users size={22} className="text-blue-400" /> Attendees Directory
           </h2>
           <p className="text-gray-400 text-sm">
-            {data?.totalElements?.toLocaleString() ?? '—'} total records
+            {data?.totalElements?.toLocaleString() ?? attendeeList.length} total records
           </p>
         </div>
       </div>
@@ -69,7 +70,7 @@ export default function AttendeesPage() {
       <div className="glass-card overflow-hidden">
         {isLoading ? (
           <div className="flex justify-center py-16"><Spinner size={8} /></div>
-        ) : data?.data?.length === 0 ? (
+        ) : attendeeList.length === 0 ? (
           <EmptyState icon={Users} title="No attendees found" description="Try adjusting your search filters" />
         ) : (
           <div className="overflow-x-auto">
@@ -82,7 +83,7 @@ export default function AttendeesPage() {
                 </tr>
               </thead>
               <tbody>
-                {data?.data?.map(a => (
+                {attendeeList.map(a => (
                   <tr key={a.id} className="table-row">
                     <td className="px-4 py-3 font-mono text-xs text-gray-300">{a.registrationId}</td>
                     <td className="px-4 py-3">

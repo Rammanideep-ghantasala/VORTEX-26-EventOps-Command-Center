@@ -106,7 +106,8 @@ export default function AccommodationPage() {
   })
 
   // Gender-based auto-filtering logic
-  const selectedAttendee = (attendeesData?.data || []).find(a => a.id === Number(allocAttendeeId))
+  const attendeeList = attendeesData?.data || attendeesData?.content || []
+  const selectedAttendee = attendeeList.find(a => a.id === Number(allocAttendeeId))
   const attendeeGender = selectedAttendee?.gender // 'MALE', 'FEMALE', or null
 
   // Compatible blocks based on gender:
@@ -173,7 +174,7 @@ export default function AccommodationPage() {
     return b.blockType === filterType
   })
 
-  const unallocatedAttendees = (attendeesData?.data || []).filter(a => a.housingRequired)
+  const unallocatedAttendees = (attendeesData?.data || attendeesData?.content || []).filter(a => a.housingRequired)
 
   return (
     <div className="space-y-6 animate-fade-in">

@@ -423,7 +423,19 @@ export const authApi = {
 export const attendeeApi = {
   getAll: async (params = {}) => {
     try {
-      return await apiClient.get('/attendees', { params })
+      const res = await apiClient.get('/attendees', { params })
+      const payload = res.data
+      const items = payload.content || payload.data || (Array.isArray(payload) ? payload : [])
+      return {
+        data: {
+          data: items,
+          content: items,
+          page: payload.page ?? params.page ?? 0,
+          size: payload.size ?? params.size ?? 15,
+          totalElements: payload.totalElements ?? items.length,
+          totalPages: payload.totalPages ?? 1,
+        },
+      }
     } catch (err) {
       if (isUnreachable(err)) {
         let list = [...mockStore.attendees]
@@ -446,6 +458,7 @@ export const attendeeApi = {
         return {
           data: {
             data: list,
+            content: list,
             page: params.page || 0,
             size: params.size || 15,
             totalElements: list.length,

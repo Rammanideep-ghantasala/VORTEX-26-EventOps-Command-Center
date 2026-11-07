@@ -32,32 +32,17 @@ VORTEX'26 centralizes those workflows into a role-based staff dashboard so each 
 
 ## Tech Stack
 
-**Frontend**
-- React 19
-- Vite 8
-- Tailwind CSS
-- TanStack Query
-- Axios
-- React Router
-- Recharts
-- Lucide React
-
-**Backend**
-- Spring Boot 3.3
-- Kotlin 2.0
-- Java 21
-- Spring Security
-- JWT with JJWT
-- BCrypt password hashing
-- Spring Data JPA / Hibernate
-- Bean Validation
-- SpringDoc OpenAPI
-
-**Database and Deployment**
-- PostgreSQL 17
-- Flyway migrations
-- Docker Compose
-- Nginx frontend container
+| Frontend | Backend | Database & Deployment |
+| --- | --- | --- |
+| React 19 | Spring Boot 3.3 | PostgreSQL 17 |
+| Vite 8 | Kotlin 2.0 | Flyway migrations |
+| Tailwind CSS | Java 21 | Docker Compose |
+| TanStack Query | Spring Security | Nginx frontend container |
+| Axios | JWT with JJWT | Environment-based configuration |
+| React Router | BCrypt password hashing | Containerized frontend and backend services |
+| Recharts | Spring Data JPA / Hibernate |  |
+| Lucide React | Bean Validation |  |
+|  | SpringDoc OpenAPI |  |
 
 ## Architecture Overview
 

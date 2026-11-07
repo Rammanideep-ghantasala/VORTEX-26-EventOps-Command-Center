@@ -61,14 +61,151 @@ VORTEX'26 centralizes those workflows into a role-based staff dashboard so each 
 
 ## Architecture Overview
 
-```text
-React SPA
-  -> Axios API client with JWT bearer token
-  -> Spring Boot REST API
-  -> Spring Security + method-level RBAC
-  -> Service layer with transactional business rules
-  -> Spring Data JPA repositories
-  -> PostgreSQL with Flyway-managed schema
+The platform uses a React single-page application, a Spring Boot API, JWT-based staff authentication, transactional service-layer business rules, and a Flyway-managed PostgreSQL database. The diagrams below are written in Mermaid so they render directly on GitHub.
+
+### System Architecture
+
+```mermaid
+flowchart LR
+    Staff[Event Staff and Admins] --> Browser[Web Browser]
+    Browser --> React[React SPA<br/>Vite + Tailwind]
+    React --> ApiClient[Axios API Client<br/>JWT Bearer Token]
+    ApiClient --> RestApi[Spring Boot REST API]
+
+    RestApi --> Security[Spring Security<br/>JWT Filter + RBAC]
+    Security --> Controllers[Controllers<br/>Auth, Attendees, Housing, Workshops, Dashboard]
+    Controllers --> Services[Service Layer<br/>Transactions + Business Rules]
+    Services --> Repositories[Spring Data JPA Repositories]
+    Repositories --> Database[(PostgreSQL)]
+    Database --> Flyway[Flyway Migrations<br/>Schema + Seed Data]
+
+    RestApi --> OpenAPI[SpringDoc OpenAPI<br/>Swagger UI]
+    React --> DemoMode[Optional Demo Mode<br/>Offline Mock Fallback]
+```
+
+### Event Operations Flow
+
+```mermaid
+flowchart TD
+    Login[Staff Login] --> RoleCheck{Role-Based Access}
+
+    RoleCheck -->|SUPER_ADMIN| AdminOps[Create Staff<br/>View Dashboards<br/>Configure Capacity]
+    RoleCheck -->|GATE_STAFF| GateOps[Search Attendee<br/>Gate Check-In]
+    RoleCheck -->|REGISTRATION_STAFF| RegOps[Register Walk-In<br/>Assign Workshops and Events]
+    RoleCheck -->|HOUSING_STAFF| HousingOps[Allocate Rooms<br/>Check-In / Check-Out]
+
+    GateOps --> DuplicateGuard[Duplicate Check-In Guard]
+    RegOps --> IdentityGuard[Duplicate Email / Phone Guard]
+    RegOps --> WorkshopGuard[Workshop Capacity Guard]
+    HousingOps --> RoomGuard[Gender, Date, and Bed Capacity Guard]
+
+    DuplicateGuard --> AuditLog[Gate Audit Log]
+    IdentityGuard --> AttendeeRecord[Attendee Record]
+    WorkshopGuard --> WorkshopRegistration[Workshop Registration]
+    RoomGuard --> HousingAllocation[Housing Allocation]
+
+    AuditLog --> Dashboard[Operational Dashboard]
+    AttendeeRecord --> Dashboard
+    WorkshopRegistration --> Dashboard
+    HousingAllocation --> Dashboard
+```
+
+### Core Data Model
+
+```mermaid
+erDiagram
+    USERS ||--o{ GATE_LOGS : operates
+    USERS ||--o{ HOUSING_ALLOCATIONS : allocates
+    ATTENDEES ||--o{ GATE_LOGS : has
+    ATTENDEES ||--o{ HOUSING_ALLOCATIONS : receives
+    ATTENDEES ||--o{ WORKSHOP_REGISTRATIONS : books
+    ATTENDEES ||--o{ EVENT_REGISTRATIONS : joins
+    HOUSING_BLOCKS ||--o{ ROOMS : contains
+    HOUSING_BLOCKS ||--o{ HOUSING_ALLOCATIONS : groups
+    ROOMS ||--o{ HOUSING_ALLOCATIONS : hosts
+    WORKSHOPS ||--o{ WORKSHOP_REGISTRATIONS : contains
+
+    USERS {
+        bigint id PK
+        string name
+        string email UK
+        string password_hash
+        string role
+        boolean active
+    }
+
+    ATTENDEES {
+        bigint id PK
+        string registration_id UK
+        string qr_code UK
+        string full_name
+        string email UK
+        string phone UK
+        string registration_type
+        boolean checked_in
+        boolean housing_required
+    }
+
+    GATE_LOGS {
+        bigint id PK
+        bigint attendee_id FK
+        bigint operator_id FK
+        string action
+        string gate_location
+        timestamp logged_at
+    }
+
+    HOUSING_BLOCKS {
+        bigint id PK
+        string block_name
+        string block_type
+        int total_rooms
+        int total_capacity
+        int occupied_beds
+    }
+
+    ROOMS {
+        bigint id PK
+        bigint block_id FK
+        string room_number
+        int capacity
+        int occupied
+    }
+
+    HOUSING_ALLOCATIONS {
+        bigint id PK
+        bigint attendee_id FK
+        bigint room_id FK
+        bigint block_id FK
+        date from_date
+        date to_date
+        string status
+    }
+
+    WORKSHOPS {
+        bigint id PK
+        string name UK
+        string code UK
+        int capacity
+        string instructor
+        string venue
+    }
+
+    WORKSHOP_REGISTRATIONS {
+        bigint id PK
+        bigint workshop_id FK
+        bigint attendee_id FK
+        string status
+        timestamp registered_at
+    }
+
+    EVENT_REGISTRATIONS {
+        bigint id PK
+        bigint attendee_id FK
+        string event_name
+        string status
+        timestamp registered_at
+    }
 ```
 
 The backend follows a layered structure:

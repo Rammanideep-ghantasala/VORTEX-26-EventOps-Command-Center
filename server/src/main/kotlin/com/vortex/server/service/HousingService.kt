@@ -23,7 +23,16 @@ class HousingService(
     @Transactional(readOnly = true)
     fun getAllBlocks(genderFilter: String? = null): List<HousingBlockResponse> {
         val blocks = housingBlockRepository.findAllByOrderByBlockTypeAscBlockNameAsc()
-        return blocks.map { block ->
+        val normalizedGender = genderFilter?.trim()?.uppercase()
+        return blocks
+            .filter { block ->
+                when (normalizedGender) {
+                    "MALE" -> block.blockType == BlockType.BOYS || block.blockType == BlockType.VIP
+                    "FEMALE" -> block.blockType == BlockType.GIRLS || block.blockType == BlockType.VIP
+                    else -> true
+                }
+            }
+            .map { block ->
             val rooms = roomRepository.findAllByBlockIdOrderByRoomNumber(block.id).map { room ->
                 val activeCount = housingAllocationRepository.countActiveAllocationsByRoomId(room.id)
                 RoomResponse.from(room, activeCount)
@@ -52,7 +61,7 @@ class HousingService(
         }
 
         // 2. Attendee retrieval
-        val attendee = attendeeRepository.findById(request.attendeeId)
+        val attendee = attendeeRepository.findByIdForUpdate(request.attendeeId)
             .orElseThrow { ResourceNotFoundException("Attendee", request.attendeeId.toString()) }
 
         if (!attendee.housingRequired) {
@@ -60,7 +69,7 @@ class HousingService(
         }
 
         // 3. Room & Block retrieval
-        val room = roomRepository.findById(request.roomId)
+        val room = roomRepository.findByIdForUpdate(request.roomId)
             .orElseThrow { ResourceNotFoundException("Room", request.roomId.toString()) }
         val block = room.block
 

@@ -5,15 +5,15 @@ services:
     container_name: vortex-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: vortex26
-      POSTGRES_USER: vortex_admin
-      POSTGRES_PASSWORD: vortex2026
+      POSTGRES_DB: ${POSTGRES_DB:-vortex26}
+      POSTGRES_USER: ${POSTGRES_USER:-vortex_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vortex2026}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U vortex_admin -d vortex26"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -27,9 +27,10 @@ services:
     restart: unless-stopped
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vortex26
-      SPRING_DATASOURCE_USERNAME: vortex_admin
-      SPRING_DATASOURCE_PASSWORD: vortex2026
-      APP_JWT_SECRET: "vortex26-super-secret-key-that-is-at-least-256-bits-long-for-hs256-algorithm"
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-vortex_admin}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-vortex2026}
+      APP_JWT_SECRET: ${APP_JWT_SECRET:-vortex26-local-dev-secret-change-before-production-32chars}
+      APP_CORS_ALLOWED_ORIGINS: ${APP_CORS_ALLOWED_ORIGINS:-http://localhost:5173}
     ports:
       - "8080:8080"
     depends_on:

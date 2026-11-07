@@ -2,6 +2,7 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api'
+export const demoModeEnabled = import.meta.env.VITE_ENABLE_DEMO_MODE === 'true'
 
 const apiClient = axios.create({
   baseURL: API_BASE,
@@ -375,13 +376,15 @@ apiClient.interceptors.response.use(
 )
 
 const isUnreachable = (err) =>
-  !err.response ||
-  err.response.status === 500 ||
-  err.response.status === 502 ||
-  err.response.status === 503 ||
-  err.response.status === 504 ||
-  err.code === 'ECONNABORTED' ||
-  err.code === 'ERR_NETWORK'
+  demoModeEnabled && (
+    !err.response ||
+    err.response.status === 500 ||
+    err.response.status === 502 ||
+    err.response.status === 503 ||
+    err.response.status === 504 ||
+    err.code === 'ECONNABORTED' ||
+    err.code === 'ERR_NETWORK'
+  )
 
 // ── Auth APIs ─────────────────────────────────────────────────────────────────
 export const authApi = {

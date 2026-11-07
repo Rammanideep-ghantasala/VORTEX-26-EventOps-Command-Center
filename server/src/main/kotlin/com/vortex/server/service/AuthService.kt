@@ -20,28 +20,28 @@ class AuthService(
 ) {
 
     fun login(request: LoginRequest): AuthResponse {
+        val email = request.email.trim().lowercase()
         val authentication = authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken(request.email, request.password)
+            UsernamePasswordAuthenticationToken(email, request.password)
         )
         val token = jwtTokenProvider.generateToken(authentication)
-        val user = userRepository.findByEmail(request.email)
+        val user = userRepository.findByEmail(email)
             .orElseThrow { UnauthorizedException("User not found") }
         return AuthResponse(token = token, user = UserProfileDto.from(user))
     }
 
-    fun register(request: RegisterUserRequest): AuthResponse {
-        if (userRepository.existsByEmail(request.email)) {
-            throw ConflictException("An account with email '${request.email}' already exists")
+    fun createStaffUser(request: RegisterUserRequest): UserProfileDto {
+        val email = request.email.trim().lowercase()
+        if (userRepository.existsByEmail(email)) {
+            throw ConflictException("An account with email '$email' already exists")
         }
         val user = User(
-            name = request.name,
-            email = request.email,
+            name = request.name.trim(),
+            email = email,
             password = passwordEncoder.encode(request.password),
             role = request.role
         )
-        userRepository.save(user)
-        val token = jwtTokenProvider.generateTokenFromEmail(user.email)
-        return AuthResponse(token = token, user = UserProfileDto.from(user))
+        return UserProfileDto.from(userRepository.save(user))
     }
 
     fun getProfile(email: String): UserProfileDto {

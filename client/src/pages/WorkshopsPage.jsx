@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { workshopsApi, attendeeApi } from '../api/apiClient'
 import {
-  BookOpen, Users, PlusCircle, Edit3, Download, Search, AlertCircle,
-  CheckCircle2, XCircle, Loader2, Sparkles, UserPlus, Filter
+  BookOpen, PlusCircle, Edit3, Download, Search,
+  Loader2, UserPlus
 } from 'lucide-react'
-import { Badge, Spinner, EmptyState } from '../components/common/ui'
+import { Spinner } from '../components/common/ui'
 import toast from 'react-hot-toast'
 
 export default function WorkshopsPage() {

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 class DashboardService(
     private val attendeeRepository: AttendeeRepository,
     private val housingBlockRepository: HousingBlockRepository,
+    private val roomRepository: RoomRepository,
     private val housingAllocationRepository: HousingAllocationRepository
 ) {
 
@@ -39,15 +40,20 @@ class DashboardService(
             .mapValues { it.value.toLong() }
             .toSortedMap()
 
+        val allRooms = roomRepository.findAll()
         val blockOccupancy = housingBlockRepository.findAll().map { block ->
+            val roomsInBlock = allRooms.filter { it.block.id == block.id }
+            val totalCapacity = roomsInBlock.sumOf { it.capacity }
+            val occupiedBeds = roomsInBlock.sumOf { housingAllocationRepository.countActiveAllocationsByRoomId(it.id) }
             BlockOccupancyDto(
+                blockId = block.id,
                 blockName = block.blockName,
                 blockType = block.blockType.name,
-                totalCapacity = block.totalCapacity,
-                occupiedBeds = block.occupiedBeds,
-                availableBeds = block.totalCapacity - block.occupiedBeds,
-                occupancyPercentage = if (block.totalCapacity > 0)
-                    (block.occupiedBeds.toDouble() / block.totalCapacity * 100) else 0.0
+                totalCapacity = totalCapacity,
+                occupiedBeds = occupiedBeds,
+                availableBeds = maxOf(0, totalCapacity - occupiedBeds),
+                occupancyPercentage = if (totalCapacity > 0)
+                    (occupiedBeds.toDouble() / totalCapacity * 100) else 0.0
             )
         }
 

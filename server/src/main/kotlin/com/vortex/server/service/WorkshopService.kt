@@ -64,7 +64,7 @@ class WorkshopService(
         if (newCapacity < 1 || newCapacity > 100) {
             throw BadRequestException("Workshop capacity must be between 1 and 100 participants")
         }
-        val workshop = workshopRepository.findById(id)
+        val workshop = workshopRepository.findByIdForUpdate(id)
             .orElseThrow { ResourceNotFoundException("Workshop", id.toString()) }
 
         val confirmedCount = workshopRegistrationRepository.countByWorkshopIdAndStatus(workshop.id, WorkshopRegStatus.CONFIRMED)
@@ -88,6 +88,7 @@ class WorkshopService(
         val startSerial = result.number * result.size + 1
         val dtos = result.content.mapIndexed { idx, reg ->
             WorkshopParticipantDto(
+                attendeeId = reg.attendee.id,
                 serialNumber = startSerial + idx,
                 registrationId = reg.attendee.registrationId,
                 fullName = reg.attendee.fullName,
@@ -130,7 +131,7 @@ class WorkshopService(
 
     @Transactional
     fun registerParticipant(workshopId: Long, attendeeId: Long): WorkshopParticipantDto {
-        val workshop = workshopRepository.findById(workshopId)
+        val workshop = workshopRepository.findByIdForUpdate(workshopId)
             .orElseThrow { ResourceNotFoundException("Workshop", workshopId.toString()) }
 
         val attendee = attendeeRepository.findById(attendeeId)
@@ -155,6 +156,7 @@ class WorkshopService(
         val saved = workshopRegistrationRepository.save(registration)
 
         return WorkshopParticipantDto(
+            attendeeId = attendee.id,
             serialNumber = confirmedCount + 1,
             registrationId = attendee.registrationId,
             fullName = attendee.fullName,
@@ -179,6 +181,7 @@ class WorkshopService(
         val saved = workshopRegistrationRepository.save(registration)
 
         return WorkshopParticipantDto(
+            attendeeId = registration.attendee.id,
             serialNumber = 0,
             registrationId = registration.attendee.registrationId,
             fullName = registration.attendee.fullName,

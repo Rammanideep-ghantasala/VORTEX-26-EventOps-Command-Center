@@ -1,6 +1,7 @@
 package com.vortex.server.exception
 
 import org.slf4j.LoggerFactory
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.AccessDeniedException
@@ -82,6 +83,18 @@ class GlobalExceptionHandler {
                 status = HttpStatus.FORBIDDEN.value(),
                 error = "Forbidden",
                 message = "You do not have permission to perform this action"
+            )
+        )
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException::class)
+    fun handleDataIntegrity(ex: DataIntegrityViolationException): ResponseEntity<ErrorResponse> {
+        log.warn("Database constraint violation: ${ex.message}")
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+            ErrorResponse(
+                status = HttpStatus.CONFLICT.value(),
+                error = "Conflict",
+                message = "The request conflicts with an existing record or capacity constraint"
             )
         )
     }

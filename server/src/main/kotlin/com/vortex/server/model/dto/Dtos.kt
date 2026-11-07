@@ -28,7 +28,7 @@ data class RegisterUserRequest(
     val email: String,
 
     @field:NotBlank(message = "Password is required")
-    @field:Size(min = 6, message = "Password must be at least 6 characters")
+    @field:Size(min = 8, message = "Password must be at least 8 characters")
     val password: String,
 
     val role: UserRole = UserRole.GATE_STAFF
@@ -66,13 +66,18 @@ data class WalkInRequest(
     val phone: String,
 
     @field:NotBlank(message = "College is required")
+    @field:Size(max = 150)
     val college: String,
 
     val gender: Gender? = Gender.MALE,
+    @field:Size(max = 100)
     val department: String? = "Computer Science & Engineering",
+    @field:Size(max = 20)
     val yearOfStudy: String? = "3rd Year",
 
+    @field:Size(max = 10, message = "A walk-in can register for at most 10 workshops")
     val workshops: List<String> = emptyList(),
+    @field:Size(max = 10, message = "A walk-in can register for at most 10 competitions")
     val competitions: List<String> = emptyList(),
     val housingRequired: Boolean = false,
     val paymentMode: PaymentMode = PaymentMode.CASH,
@@ -172,11 +177,14 @@ data class AttendeeProfileResponse(
 
 data class CheckInRequest(
     @field:NotBlank(message = "Registration ID or QR code is required")
+    @field:Size(max = 255)
     val query: String,     // registrationId OR qrCode
 
     @field:NotBlank
+    @field:Size(max = 50)
     val gateLocation: String = "Main Gate",
 
+    @field:Size(max = 500)
     val note: String? = null
 )
 
@@ -393,6 +401,7 @@ data class WorkshopResponse(
 }
 
 data class WorkshopParticipantDto(
+    val attendeeId: Long,
     val serialNumber: Int,
     val registrationId: String,
     val fullName: String,

@@ -5,14 +5,14 @@ import {
   Users, CheckCircle, Clock, Home, UserPlus, TrendingUp, BarChart2, Bed
 } from 'lucide-react'
 import {
-  AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, Cell
 } from 'recharts'
 
 const CHART_COLORS = ['#9f1239', '#be123c', '#fb7185', '#881337', '#e11d48', '#fda4af']
 
 export default function DashboardPage() {
-  const { data: stats, isLoading } = useQuery({
+  const { data: stats, isLoading, isError, error } = useQuery({
     queryKey: ['dashboard-stats'],
     queryFn: () => dashboardApi.getStats().then(r => r.data),
     refetchInterval: 15000,
@@ -20,6 +20,13 @@ export default function DashboardPage() {
 
   if (isLoading) return (
     <div className="flex items-center justify-center h-64"><Spinner size={8} /></div>
+  )
+
+  if (isError) return (
+    <div className="glass-card p-6 border border-rose-500/30 text-rose-300">
+      <p className="font-semibold">Dashboard data could not be loaded.</p>
+      <p className="text-sm text-gray-400 mt-1">{error?.response?.data?.message || error?.message || 'Check the API server and try again.'}</p>
+    </div>
   )
 
   const s = stats

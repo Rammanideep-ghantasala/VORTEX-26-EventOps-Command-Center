@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:vortex_test;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  flyway:
+    enabled: false
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-test.sql
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    show-sql: false
+
+app:
+  jwt:
+    secret: test-jwt-secret-must-be-at-least-32-bytes
+    expiration-ms: 3600000
+  cors:
+    allowed-origins: http://localhost:5173
+
+logging:
+  level:
+    org.springframework.security: WARN
+    org.hibernate: WARN

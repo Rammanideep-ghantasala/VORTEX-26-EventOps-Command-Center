@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
@@ -22,9 +23,10 @@ class AuthController(private val authService: AuthService) {
     }
 
     @PostMapping("/register")
-    @Operation(summary = "Register a new staff account (SUPER_ADMIN only in production)")
-    fun register(@Valid @RequestBody request: RegisterUserRequest): ResponseEntity<AuthResponse> {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(request))
+    @Operation(summary = "Create a staff account (SUPER_ADMIN only)")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    fun register(@Valid @RequestBody request: RegisterUserRequest): ResponseEntity<UserProfileDto> {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.createStaffUser(request))
     }
 
     @GetMapping("/me")

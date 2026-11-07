@@ -2,10 +2,9 @@ import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { housingApi, attendeeApi } from '../api/apiClient'
 import {
-  Home, Bed, Users, Filter, CheckCircle2, LogOut, PlusCircle,
-  AlertCircle, Loader2, Sparkles, ShieldAlert, DoorClosed
+  Home, Bed, Users, PlusCircle, Loader2
 } from 'lucide-react'
-import { Badge, Spinner, EmptyState } from '../components/common/ui'
+import { Spinner, EmptyState } from '../components/common/ui'
 import toast from 'react-hot-toast'
 
 export default function HousingPage() {

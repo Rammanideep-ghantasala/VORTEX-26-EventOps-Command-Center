@@ -60,8 +60,8 @@ class WorkshopController(private val workshopService: WorkshopService) {
         @RequestParam(defaultValue = "CONFIRMED") status: String
     ): ResponseEntity<PagedResponse<WorkshopParticipantDto>> {
         val regStatus = runCatching { WorkshopRegStatus.valueOf(status.uppercase()) }.getOrDefault(WorkshopRegStatus.CONFIRMED)
-        val pageable = PageRequest.of(page, size)
-        return ResponseEntity.ok(workshopService.getParticipants(id, regStatus, search, pageable))
+        val pageable = PageRequest.of(page.coerceAtLeast(0), size.coerceIn(1, 100))
+        return ResponseEntity.ok(workshopService.getParticipants(id, regStatus, search?.trim()?.take(100), pageable))
     }
 
     @GetMapping("/{id}/export")

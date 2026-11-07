@@ -1,7 +1,9 @@
 package com.vortex.server.repository
 
 import com.vortex.server.model.entity.*
+import jakarta.persistence.LockModeType
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Lock
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
@@ -17,6 +19,10 @@ interface HousingBlockRepository : JpaRepository<HousingBlock, Long> {
 @Repository
 interface RoomRepository : JpaRepository<Room, Long> {
     fun findByBlockId(blockId: Long): List<Room>
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT r FROM Room r WHERE r.id = :id")
+    fun findByIdForUpdate(@Param("id") id: Long): Optional<Room>
 
     @Query("SELECT r FROM Room r WHERE r.block.id = :blockId ORDER BY r.roomNumber ASC")
     fun findAllByBlockIdOrderByRoomNumber(blockId: Long): List<Room>

@@ -2,6 +2,7 @@ package com.vortex.server.config
 
 import com.vortex.server.security.JwtAuthenticationFilter
 import com.vortex.server.security.CustomUserDetailsService
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -25,7 +26,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableMethodSecurity(prePostEnabled = true)  // Enables @PreAuthorize on controllers
 class SecurityConfig(
     private val jwtAuthFilter: JwtAuthenticationFilter,
-    private val userDetailsService: CustomUserDetailsService
+    private val userDetailsService: CustomUserDetailsService,
+    @Value("\${app.cors.allowed-origins}") private val allowedOrigins: String
 ) {
 
     @Bean
@@ -46,7 +48,9 @@ class SecurityConfig(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val config = CorsConfiguration().apply {
-            allowedOrigins = listOf("http://localhost:5173", "http://localhost:3000")
+            allowedOrigins = this@SecurityConfig.allowedOrigins.split(',')
+                .map { it.trim() }
+                .filter { it.isNotBlank() }
             allowedMethods = listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
             allowedHeaders = listOf("*")
             allowCredentials = true
@@ -68,7 +72,7 @@ class SecurityConfig(
                     // Public endpoints
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .requestMatchers("/error").permitAll()
-                    .requestMatchers("/api/auth/**", "/auth/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                     .requestMatchers("/swagger-ui/**", "/api-docs/**", "/swagger-ui.html").permitAll()
                     .requestMatchers("/actuator/health").permitAll()
                     // All other requests require authentication

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { attendeeApi } from '../api/apiClient'
-import { Users, Search, Filter, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
+import { Users, Search, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
 import { Badge, Spinner, EmptyState } from '../components/common/ui'
 import AttendeeProfileModal from '../components/attendees/AttendeeProfileModal'
 
@@ -13,7 +13,7 @@ export default function AttendeesPage() {
   const [checkedIn, setCheckedIn] = useState('')
   const [selected, setSelected] = useState(null)
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['attendees', page, search, type, checkedIn],
     queryFn: () => attendeeApi.getAll({
       page, size: 15, search: search || undefined,
@@ -70,6 +70,11 @@ export default function AttendeesPage() {
       <div className="glass-card overflow-hidden">
         {isLoading ? (
           <div className="flex justify-center py-16"><Spinner size={8} /></div>
+        ) : isError ? (
+          <div className="p-6 text-rose-300">
+            <p className="font-semibold">Attendee records could not be loaded.</p>
+            <p className="text-sm text-gray-400 mt-1">{error?.response?.data?.message || error?.message || 'Check the API server and try again.'}</p>
+          </div>
         ) : attendeeList.length === 0 ? (
           <EmptyState icon={Users} title="No attendees found" description="Try adjusting your search filters" />
         ) : (

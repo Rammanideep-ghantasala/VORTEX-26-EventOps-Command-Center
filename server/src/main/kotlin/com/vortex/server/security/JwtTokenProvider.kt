@@ -19,7 +19,10 @@ class JwtTokenProvider(
     private val log = LoggerFactory.getLogger(javaClass)
 
     private val signingKey: SecretKey by lazy {
-        // Use raw bytes for the secret (must be ≥256 bits for HS256)
+        require(jwtSecret.toByteArray().size >= 32) {
+            "APP_JWT_SECRET must be at least 32 bytes for HS256"
+        }
+        // Use raw bytes for the secret (must be at least 256 bits for HS256)
         Keys.hmacShaKeyFor(jwtSecret.toByteArray())
     }
 

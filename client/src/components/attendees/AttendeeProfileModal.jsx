@@ -3,8 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { attendeeApi } from '../../api/apiClient'
 import {
   User, Bed, BookOpen, Award, History, Clock, CheckCircle2,
-  XCircle, AlertCircle, Building, MapPin, Mail, Phone,
-  GraduationCap, Calendar, X, Shield, ArrowRight, Tag
+  AlertCircle, X, Tag
 } from 'lucide-react'
 import { Badge, Spinner } from '../common/ui'
 
@@ -19,13 +18,12 @@ export default function AttendeeProfileModal({ attendeeId, onClose }) {
 
   if (!attendeeId) return null
 
-  const p = profile?.personal
-  const accom = profile?.accommodation
-  const currentAlloc = accom?.current
-  const pastAllocs = accom?.history || []
-  const workshops = profile?.workshops || []
-  const events = profile?.events || []
-  const regHistory = profile?.registrationHistory || []
+  const p = profile?.personalInfo
+  const currentAlloc = profile?.currentAccommodation
+  const pastAllocs = profile?.accommodationHistory || []
+  const workshops = profile?.workshopRegistrations || []
+  const events = profile?.eventRegistrations || []
+  const regHistory = profile?.gateLogs || []
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
@@ -250,7 +248,7 @@ export default function AttendeeProfileModal({ attendeeId, onClose }) {
                         <div>
                           <span className="text-gray-500 block mb-0.5">Hostel & Block</span>
                           <span className="text-white font-bold text-sm">
-                            {currentAlloc.hostelName} {currentAlloc.block ? `(${currentAlloc.block})` : ''}
+                            {currentAlloc.blockName}
                           </span>
                         </div>
                         <div>
@@ -287,7 +285,7 @@ export default function AttendeeProfileModal({ attendeeId, onClose }) {
                         <div>
                           <span className="text-gray-500">Hostel Check-in: </span>
                           <span className="text-gray-200">
-                            {currentAlloc.checkInDate ? new Date(currentAlloc.checkInDate).toLocaleDateString() : 'Pending'}
+                            {currentAlloc.checkedInAt ? new Date(currentAlloc.checkedInAt).toLocaleDateString() : 'Pending'}
                           </span>
                         </div>
                       </div>
@@ -328,14 +326,14 @@ export default function AttendeeProfileModal({ attendeeId, onClose }) {
                           <tbody className="divide-y divide-gray-800/50">
                             {pastAllocs.map((hist) => (
                               <tr key={hist.id} className="hover:bg-gray-800/20">
-                                <td className="px-3 py-2 text-white font-medium">{hist.hostelName} {hist.block ? `(${hist.block})` : ''}</td>
+                                <td className="px-3 py-2 text-white font-medium">{hist.blockName}</td>
                                 <td className="px-3 py-2 font-mono text-gray-300">{hist.roomNumber}</td>
                                 <td className="px-3 py-2 text-gray-400">{hist.fromDate || '—'} → {hist.toDate || '—'}</td>
                                 <td className="px-3 py-2 text-gray-400">
-                                  {hist.actualCheckOutDate ? new Date(hist.actualCheckOutDate).toLocaleString() : '—'}
+                                  {hist.checkedOutAt ? new Date(hist.checkedOutAt).toLocaleString() : '—'}
                                 </td>
                                 <td className="px-3 py-2">
-                                  <Badge variant={hist.status === 'VACATED' ? 'gray' : 'amber'}>
+                                  <Badge variant={hist.status === 'CHECKED_OUT' ? 'gray' : 'amber'}>
                                     {hist.status}
                                   </Badge>
                                 </td>

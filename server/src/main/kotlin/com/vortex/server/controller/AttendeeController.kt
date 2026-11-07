@@ -67,7 +67,7 @@ class AttendeeController(private val attendeeService: AttendeeService) {
     }
 
     @PostMapping("/check-in")
-    @Operation(summary = "Gate check-in by Registration ID or QR code — prevents double entry")
+    @Operation(summary = "Gate check-in by Registration ID, QR code, or email — prevents double entry")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'GATE_STAFF')")
     fun checkIn(
         @Valid @RequestBody request: CheckInRequest,

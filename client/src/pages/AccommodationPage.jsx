@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { accommodationApi, attendeeApi } from '../api/apiClient'
 import {
-  Home, Bed, Users, Calendar, AlertTriangle, PlusCircle, CheckCircle2,
-  LogOut, ShieldAlert, Edit2, Loader2, Sparkles, Clock, ArrowRight
+  Home, Bed, Users, Calendar, AlertTriangle, PlusCircle,
+  LogOut, Edit2, Loader2, Clock
 } from 'lucide-react'
-import { Badge, Spinner, EmptyState } from '../components/common/ui'
+import { Spinner, EmptyState } from '../components/common/ui'
 import toast from 'react-hot-toast'
 
 export default function AccommodationPage() {

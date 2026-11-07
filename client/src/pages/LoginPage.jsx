@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { demoModeEnabled } from '../api/apiClient'
 import { Zap, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react'
 
 export default function LoginPage() {
@@ -33,6 +34,7 @@ export default function LoginPage() {
       admin: { email: 'admin@vortex26.com', password: 'Admin@vortex26' },
       gate: { email: 'gate@vortex26.com', password: 'Admin@vortex26' },
       housing: { email: 'housing@vortex26.com', password: 'Admin@vortex26' },
+      reg: { email: 'reg@vortex26.com', password: 'Admin@vortex26' },
     }
     setForm(creds[role])
   }
@@ -93,9 +95,11 @@ export default function LoginPage() {
 
         {/* Demo credentials */}
         <div className="glass-card p-4 space-y-2">
-          <p className="text-gray-500 text-xs font-medium uppercase tracking-wide text-center">Demo Accounts</p>
-          <div className="grid grid-cols-3 gap-2">
-            {[['admin','Super Admin'],['gate','Gate Staff'],['housing','Housing']].map(([r,l]) => (
+          <p className="text-gray-500 text-xs font-medium uppercase tracking-wide text-center">
+            Local Seed Accounts{demoModeEnabled ? ' + Offline Demo Mode' : ''}
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {[['admin','Super Admin'],['gate','Gate Staff'],['housing','Housing'],['reg','Registration']].map(([r,l]) => (
               <button key={r} onClick={() => fillDemo(r)}
                 className="text-xs py-1.5 px-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-md transition-colors">
                 {l}

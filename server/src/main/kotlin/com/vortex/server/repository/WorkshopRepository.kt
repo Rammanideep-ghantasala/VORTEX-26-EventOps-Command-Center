@@ -1,9 +1,11 @@
 package com.vortex.server.repository
 
 import com.vortex.server.model.entity.*
+import jakarta.persistence.LockModeType
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Lock
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
@@ -15,6 +17,14 @@ interface WorkshopRepository : JpaRepository<Workshop, Long> {
     fun findByCode(code: String): Optional<Workshop>
     fun existsByName(name: String): Boolean
     fun existsByCode(code: String): Boolean
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT w FROM Workshop w WHERE w.id = :id")
+    fun findByIdForUpdate(@Param("id") id: Long): Optional<Workshop>
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT w FROM Workshop w WHERE w.name = :name")
+    fun findByNameForUpdate(@Param("name") name: String): Optional<Workshop>
 }
 
 @Repository

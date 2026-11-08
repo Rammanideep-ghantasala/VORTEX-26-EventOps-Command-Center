@@ -1,5 +1,7 @@
 # VORTEX'26 EventOps Command Center
 
+[![CI](https://github.com/Rammanideep-ghantasala/VORTEX-26-EventOps-Command-Center/actions/workflows/ci.yml/badge.svg)](https://github.com/Rammanideep-ghantasala/VORTEX-26-EventOps-Command-Center/actions/workflows/ci.yml)
+
 A full-stack event operations platform for managing attendee registration, gate admissions, accommodation, workshop capacity, staff access, and operational dashboards for a large college or technical symposium.
 
 ## Business Problem
